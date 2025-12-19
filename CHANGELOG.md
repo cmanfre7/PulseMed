@@ -1,5 +1,17 @@
 ## Changelog
 
+### 0.1.1 — 2025-12-19
+
+- **Tone and messaging refinement**
+  - Replaced startup-oriented language with clinical, operational copy throughout the landing page.
+  - Updated hero headline from "The AI infrastructure physicians actually trust" to "An AI system constrained by physician-owned sources and auditable outputs."
+  - Revised hero subhead to emphasize physician-defined boundaries and explicit separation from autonomous clinical decision-making.
+  - Updated architecture section header to "Architecture designed to keep clinical teams in control."
+  - Replaced "Progressive learning, physician gatekept" with "Physician-reviewed iteration — no autonomous behavior changes" to clarify medico-legal boundaries.
+  - Refined "Humanistic interaction layer" to "Emotionally appropriate, clinically restrained communication" with emphasis on supporting—not replacing—clinical judgment.
+  - Updated CTA section and navigation buttons to use clinical terminology ("Schedule a clinical demo", "Contact clinical operations").
+  - Adjusted credibility section to emphasize clinical collaboration and strict boundaries around decision-making and data handling.
+
 ### 0.1.0 — 2025-12-19
 
 - **Project structure**

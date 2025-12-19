@@ -16,7 +16,7 @@ export default function Home() {
             <button className="hover:text-zinc-100">Technology</button>
             <button className="hover:text-zinc-100">Pricing</button>
             <button className="rounded-full border border-emerald-400/60 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300 shadow-[0_0_25px_rgba(34,197,94,0.35)] hover:border-emerald-300 hover:bg-emerald-400/20">
-              Request early access
+              Schedule demo
             </button>
           </nav>
         </div>
@@ -30,19 +30,24 @@ export default function Home() {
             <div className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/5 px-3 py-1 text-xs font-medium text-emerald-200 shadow-[0_0_30px_rgba(34,197,94,0.35)]">
               <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Production-proven medical AI platform
+              Deployed in live clinical settings
             </div>
             <div className="space-y-5">
               <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl">
-                The AI infrastructure
+                An AI system constrained by
                 <br />
-                physicians actually trust.
+                physician-owned sources and auditable outputs.
           </h1>
               <p className="max-w-xl text-pretty text-base text-zinc-400 sm:text-lg">
-                PulseMed is a white-label healthcare platform that turns your
-                practice&apos;s own protocols into a 24/7, humanistic AI
-                assistant—built on physician-curated knowledge, progressive
-                learning, and strict HIPAA safeguards.
+                PulseMed is a white-label healthcare platform that translates a
+                practice&apos;s own protocols, education materials, and triage
+                pathways into a 24/7 AI assistant—operating within
+                physician-defined boundaries and strict HIPAA safeguards.
+              </p>
+              <p className="max-w-xl text-pretty text-sm text-zinc-500">
+                The system delivers patient guidance grounded exclusively in
+                practice-approved sources, with full traceability and no
+                autonomous clinical decision-making.
               </p>
             </div>
 
@@ -81,9 +86,9 @@ export default function Home() {
               </div>
               <div className="space-y-1">
                 <div className="text-sm font-semibold text-zinc-100">
-                  Humanistic by design
+                  Clinically restrained communication
                 </div>
-                <p>Emotionally intelligent, non-overwhelming patient dialogue.</p>
+                <p>Emotionally appropriate dialogue that supports—not replaces—clinical judgment.</p>
               </div>
               </div>
             </div>
@@ -98,7 +103,7 @@ export default function Home() {
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                   Live patient conversation
                 </span>
-                <span>PulseMed · Humanistic AI</span>
+                <span>PulseMed · Clinical AI</span>
               </div>
               <div className="space-y-3 text-sm">
                 <div className="max-w-[90%] rounded-2xl bg-zinc-900 px-4 py-3 text-zinc-100">
@@ -155,14 +160,15 @@ export default function Home() {
                 Architecture
               </p>
               <h2 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-zinc-50 md:text-3xl">
-                Three pillars that keep physicians in control.
+                Architecture designed to keep clinical teams in control.
               </h2>
             </div>
             <p className="hidden max-w-sm text-xs text-zinc-400 md:block">
-              PulseMed is built on a curated-knowledge architecture with progressive
-              learning and humanistic interaction. Only approved sources are used
-              for patient guidance, with clear boundaries between education and
-              clinical decision-making.
+              PulseMed uses a curated-knowledge architecture with
+              physician-reviewed iteration and a human-centered interaction
+              layer. The system does not independently evolve its medical
+              guidance—changes are proposed, reviewed, and approved by
+              clinicians before deployment.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -192,17 +198,18 @@ export default function Home() {
               </div>
               <div className="relative space-y-3">
                 <h3 className="text-sm font-semibold text-zinc-50">
-                  Progressive learning, physician gatekept
+                  Physician-reviewed iteration — no autonomous behavior changes
                 </h3>
                 <p className="text-xs text-zinc-400">
-                  The system surfaces patterns and blind spots over time, but
-                  physicians stay in the loop on what changes. No opaque &quot;self
-                  learning&quot;—only guided refinement.
+                  PulseMed surfaces recurring patient questions and content gaps
+                  over time, then proposes refinements for clinician review.
+                  Updates are never auto-published and do not alter clinical
+                  guidance without explicit approval.
                 </p>
                 <ul className="mt-3 space-y-1.5 text-[11px] text-zinc-400">
-                  <li>• Identify recurrent questions and gaps</li>
-                  <li>• Propose updates for review—not auto-publish</li>
-                  <li>• Track how refinements impact patient experience</li>
+                  <li>• Identify recurrent patient questions and friction points</li>
+                  <li>• Propose protocol refinements for review</li>
+                  <li>• Track downstream impact on patient understanding and call volume</li>
                 </ul>
               </div>
             </div>
@@ -212,17 +219,18 @@ export default function Home() {
               </div>
               <div className="relative space-y-3">
                 <h3 className="text-sm font-semibold text-zinc-50">
-                  Humanistic interaction layer
+                  Emotionally appropriate, clinically restrained communication
                 </h3>
                 <p className="text-xs text-zinc-400">
-                  Designed for emotionally appropriate, non-overwhelming
-                  conversation. The assistant leads with empathy, then offers clear,
-                  digestible guidance.
+                  Patient conversations are designed to reduce anxiety without
+                  overwhelming users. The assistant leads with empathy, then
+                  delivers clear, structured guidance aligned with the
+                  practice&apos;s standards.
                 </p>
                 <ul className="mt-3 space-y-1.5 text-[11px] text-zinc-400">
-                  <li>• Calibrated tone for routine vs. stressful moments</li>
-                  <li>• Short, structured responses with clear next steps</li>
-                  <li>• Feels like a supportive teammate, not a search engine</li>
+                  <li>• Calibrated tone for routine questions vs high-stress situations</li>
+                  <li>• Short, digestible responses with clear next steps</li>
+                  <li>• Designed to support—not replace—clinical judgment</li>
                 </ul>
               </div>
             </div>
@@ -240,11 +248,11 @@ export default function Home() {
                 From late-night questions to long-term trust.
               </h2>
               <p className="max-w-xl text-sm text-zinc-400">
-                PulseMed was shaped hand-in-hand with physicians, practice
-                managers, and caregivers. It&apos;s flexible enough for different
-                specialties—from resource-heavy education practices to
-                triage-intensive clinics—without exposing how any single practice
-                is wired under the hood.
+                PulseMed was developed in collaboration with physicians, practice
+                managers, and caregivers. The platform adapts to different
+                specialties and workflows—from resource-heavy education practices
+                to triage-intensive clinics—while maintaining strict boundaries
+                around clinical decision-making and data handling.
               </p>
               <div className="grid gap-6 text-xs text-zinc-400 sm:grid-cols-3">
                 <div>
@@ -294,20 +302,20 @@ export default function Home() {
                 Early access
               </p>
               <h3 className="text-balance text-lg font-semibold text-zinc-50 md:text-xl">
-                Bring physician-controlled AI to your practice.
+                Deploy physician-controlled AI in your clinical setting.
               </h3>
               <p className="max-w-xl text-xs text-zinc-200">
-                Share a bit about your specialty and current patient load. We&apos;ll
-                walk you through a curated demo and discuss what a safe, branded
-                deployment could look like—without revealing proprietary internals.
+                Discuss your specialty, patient volume, and current workflows.
+                We&apos;ll provide a demonstration and outline deployment options
+                that maintain clinical control and HIPAA compliance.
           </p>
         </div>
             <div className="flex flex-col gap-3 md:flex-row md:items-center">
               <button className="rounded-full bg-emerald-400 px-6 py-2.5 text-sm font-medium text-black shadow-[0_16px_60px_rgba(34,197,94,0.6)] hover:-translate-y-0.5 hover:shadow-[0_20px_80px_rgba(34,197,94,0.75)]">
-                Request a practice demo
+                Schedule a clinical demo
               </button>
               <button className="rounded-full border border-emerald-200/50 bg-transparent px-6 py-2.5 text-sm font-medium text-emerald-100 hover:bg-emerald-500/10">
-                Talk with our team
+                Contact clinical operations
               </button>
             </div>
         </div>
