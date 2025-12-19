@@ -1,5 +1,11 @@
 ## Changelog
 
+### 0.1.3 — 2025-12-19
+
+- **Visual fixes**
+  - Restored architecture flow graphic in hero section right column.
+  - Fixed JSX structure to properly display the flow diagram (Physician Input → Defined Boundaries → AI Processing → Auditable Output).
+
 ### 0.1.2 — 2025-12-19
 
 - **Visual design overhaul**
