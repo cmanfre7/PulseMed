@@ -1,5 +1,27 @@
 ## Changelog
 
+### 0.1.2 — 2025-12-19
+
+- **Visual design overhaul**
+  - Replaced dark/neon color scheme with professional healthcare palette (medical blue + slate).
+  - Updated all accent colors from neon emerald/cyan to professional blue tones.
+  - Removed glow effects and neon shadows for cleaner, clinical aesthetic.
+  - Changed backgrounds from pure black to softer slate-900.
+- **Content and messaging refinements**
+  - Emphasized "built by physicians" (not just "in collaboration with") throughout.
+  - Added "no autonomous decision making" explicitly to main description.
+  - Updated hero badge to "A physician-controlled medical AI platform, deployed in live clinical settings."
+  - Replaced redundant factoid cards with framing box: "Designed to withstand clinical, legal, and operational review."
+  - Tightened pillar descriptions for better scannability.
+- **User experience improvements**
+  - Swapped CTA button order: "Explore the architecture" now primary, "Schedule a demo" secondary.
+  - Added "Read more" expandable functionality to conversation panel AI response.
+  - Updated conversation example to respiratory assessment scenario with more detailed, empathetic response.
+- **Metrics section updates**
+  - Reframed metrics to emphasize restraint: "0 Autonomous clinical decisions made. Zero."
+  - Updated language to focus on what the system doesn't do rather than achievements.
+  - Added risk committee framing: "Designed to pass risk committee review, not marketing decks."
+
 ### 0.1.1 — 2025-12-19
 
 - **Tone and messaging refinement**
