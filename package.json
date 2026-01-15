@@ -1,0 +1,27 @@
+{
+  "name": "pulsemed",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PulseMed - White-label Healthcare AI Platform",
+  "workspaces": [
+    "packages/*",
+    "clients/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:nayacare": "npm run dev --workspace=clients/nayacare",
+    "dev:hip": "npm run dev --workspace=clients/hippreservation",
+    "dev:web": "npm run dev --workspace=apps/web",
+    "build:all": "npm run build --workspaces --if-present",
+    "start:nayacare": "npm run start --workspace=clients/nayacare",
+    "start:hip": "npm run start --workspace=clients/hippreservation"
+  },
+  "keywords": [
+    "healthcare",
+    "ai",
+    "chatbot",
+    "hipaa"
+  ],
+  "author": "PulseMed LLC",
+  "license": "UNLICENSED"
+}

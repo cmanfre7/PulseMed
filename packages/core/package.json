@@ -1,0 +1,36 @@
+{
+  "name": "@pulsemed/core",
+  "version": "1.0.0",
+  "description": "PulseMed Core Framework - Platform-agnostic medical AI infrastructure",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./server": "./server.js",
+    "./chat": "./api/chat.js",
+    "./auth": "./api/auth/index.js",
+    "./admin": "./api/admin/index.js",
+    "./utils": "./utils/index.js",
+    "./types": "./types/index.js"
+  },
+  "scripts": {
+    "build": "echo 'Core package ready'",
+    "test": "echo 'No tests yet'"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.63.0",
+    "express": "^4.18.2",
+    "form-data": "^4.0.4",
+    "pdf-parse": "^1.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "keywords": [
+    "pulsemed",
+    "healthcare",
+    "ai"
+  ],
+  "license": "UNLICENSED"
+}

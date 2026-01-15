@@ -1,0 +1,10 @@
+# Client-Specific Overrides
+
+Place any client-specific code overrides in this directory.
+
+Examples:
+- custom-triage.js - Custom triage logic
+- custom-components.jsx - Custom React components
+- custom-analytics.js - Custom analytics tracking
+
+These will be imported by the main application when present.

@@ -1,0 +1,89 @@
+{
+  "clientId": "hippreservation",
+  "clientName": "Hip Preservation Orthopedic Surgery",
+  "displayName": "HipGuide",
+  "specialty": "orthopedics",
+  "platform": "wix",
+  
+  "branding": {
+    "primaryColor": "#4a1c7c",
+    "secondaryColor": "#6b2c9e",
+    "accentColor": "#c9a227",
+    "backgroundColor": "#ffffff",
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "logo": null,
+    "chatbotName": "HipGuide",
+    "welcomeMessage": "Hi! I'm HipGuide, your recovery companion. I'm here to help with questions about your hip surgery journey. How can I support you today?"
+  },
+  
+  "features": {
+    "chat": true,
+    "imageAnalysis": false,
+    "patientLogging": false,
+    "adminDashboard": true,
+    "surveySystem": false,
+    "pdfGeneration": true,
+    "consentTracking": true
+  },
+  
+  "ai": {
+    "model": "claude-sonnet-4-5-20250929",
+    "maxTokens": 1000,
+    "temperature": 0.9,
+    "systemPromptAdditions": [
+      "You specialize in hip preservation surgery recovery, including PAO (Periacetabular Osteotomy), hip arthroscopy, and combined procedures.",
+      "You understand the typical recovery timeline: immediate post-op (0-2 weeks), early recovery (2-6 weeks), intermediate recovery (6-12 weeks), and return to activity (3-6 months).",
+      "When discussing physical therapy, emphasize the importance of following the specific PT protocol provided by the surgical team.",
+      "For pain management questions, always recommend following the prescribed medication schedule and contacting the surgical team for adjustments.",
+      "Be supportive and encouraging - hip surgery recovery can be challenging and patients often feel isolated or frustrated."
+    ]
+  },
+  
+  "triage": {
+    "emergencyKeywords": [
+      "call 911", "not breathing", "chest pain",
+      "blood clot", "severe pain", "numbness",
+      "can't feel", "leg turning blue", "DVT", "PE",
+      "pulmonary embolism", "heavy bleeding",
+      "wound infection", "fever over 101"
+    ],
+    "urgentKeywords": [
+      "increased swelling", "new pain", "wound drainage",
+      "redness spreading", "can't bear weight"
+    ],
+    "escalationMessage": "🚨 URGENT - CONTACT YOUR SURGEON IMMEDIATELY 🚨\n\nBased on what you've described, you should contact your surgeon's office right away. If you're experiencing signs of a blood clot (leg pain, swelling, warmth), chest pain, or difficulty breathing, call 911 or go to the nearest emergency room.\n\nYour surgical team's contact information should be in your discharge paperwork."
+  },
+  
+  "knowledgeBase": {
+    "enabled": true,
+    "maxDocuments": 50,
+    "maxFileSizeMB": 10,
+    "categories": [
+      "Pre-Operative",
+      "Post-Operative",
+      "Physical Therapy",
+      "Pain Management",
+      "Recovery Timeline",
+      "Complications"
+    ],
+    "medicalTopics": [
+      "hip", "PAO", "periacetabular", "osteotomy", "arthroscopy",
+      "surgery", "recovery", "pain", "swelling", "physical therapy",
+      "PT", "exercises", "walking", "crutches", "weight bearing",
+      "medication", "incision", "wound", "scar", "healing",
+      "sleep", "shower", "driving", "work", "activity"
+    ]
+  },
+  
+  "contact": {
+    "practiceName": "Hip Preservation Orthopedic Surgery",
+    "phoneNumber": null,
+    "emergencyInstructions": "For emergencies, call 911 or go to the nearest emergency room. For urgent concerns, contact your surgeon's office during business hours or the on-call service after hours."
+  },
+  
+  "legal": {
+    "tosVersion": "1.0.0",
+    "privacyPolicyVersion": "1.0.0",
+    "disclaimer": "This assistant provides educational information about hip preservation surgery recovery. It does not replace medical advice from your surgical team. Always follow your surgeon's specific instructions and contact them with concerns."
+  }
+}
