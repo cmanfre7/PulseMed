@@ -18,15 +18,15 @@ PulseMed/
 │       └── types/               # Type definitions
 │
 ├── clients/
-│   └── hippreservation/         # 🦴 HIP PRESERVATION CLIENT (your workspace)
+│   ├── nayacare/                # 👶 NAYACARE (PRODUCTION - HubSpot)
+│   │   └── ...                  # Complete, don't modify unless necessary
+│   │
+│   └── hippreservation/         # 🦴 HIP PRESERVATION (IN DEVELOPMENT - Wix)
 │       ├── config.json          # Client configuration
 │       ├── knowledge-base/      # PDF documents
 │       ├── prompts/             # System prompt customizations
 │       ├── overrides/           # Client-specific code
 │       └── src/                 # React frontend
-│
-├── nayacare/                    # 👶 NAYACARE (PRODUCTION - DO NOT TOUCH)
-│                                # This is a separate, completed project
 │
 ├── web/                         # 🌐 Marketing website (Next.js)
 │
@@ -48,7 +48,8 @@ Each client gets their own folder under `/clients/`. All work for that client st
 - Custom features → `overrides/`
 
 **Current clients:**
-- `hippreservation/` - Hip Preservation Orthopedic Surgery (Wix)
+- `nayacare/` - NayaCare Pediatrics (HubSpot) - **PRODUCTION**
+- `hippreservation/` - Hip Preservation Orthopedic Surgery (Wix) - **IN DEVELOPMENT**
 
 ### 3. Core Changes Require Discussion
 If you think something should be added to `packages/core/`, discuss it first. Core changes affect ALL future clients.
