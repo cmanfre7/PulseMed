@@ -1,0 +1,20 @@
+{
+  "functions": {
+    "api/admin/upload-pdf.ts": {
+      "maxDuration": 60,
+      "memory": 3008
+    },
+    "api/admin/upload-resource-pdf.ts": {
+      "maxDuration": 60,
+      "memory": 3008
+    },
+    "api/admin/get-hubspot-upload-url.ts": {
+      "maxDuration": 30,
+      "memory": 1024
+    },
+    "api/admin/process-hubspot-pdf.ts": {
+      "maxDuration": 60,
+      "memory": 3008
+    }
+  }
+}

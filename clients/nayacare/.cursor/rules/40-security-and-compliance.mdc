@@ -1,0 +1,23 @@
+---
+description: HIPAA‑aligned controls on HubSpot (Sensitive Data, BAA)
+type: Always
+alwaysApply: true
+---
+
+
+# HubSpot Settings
+- Enterprise account with **Sensitive Data** enabled; accept HubSpot **BAA**. Restrict PHI to designated properties only.
+- Enable audit logging, IP allowlist for admin, SSO, and field‑level permissions on Sensitive Data.
+
+
+# Data Handling
+- Default: no PHI retention. If consented, store minimally in Sensitive Data properties; encrypt at rest (HubSpot managed).
+- Log consent timestamp & policy version on the contact.
+
+
+# Third‑Party Calls
+- If AI vendor is not covered by BAA, run **de‑identification** in functions and exclude PHI from prompts.
+
+
+# PDFs & Links
+- PDFs generated via serverless function; stored in Files with short‑lived signed URLs (≤24h) shared to the user.

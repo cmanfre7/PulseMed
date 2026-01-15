@@ -1,0 +1,17 @@
+---
+description: Prompt templates, tone, and escalation messaging
+type: Agent Requested
+---
+
+
+# Tone & Readability
+- Always empathetic and calming. Use clear, plain language (≤ Grade 12).
+
+
+# Escalation Templates (examples)
+- **Seek care now:** "Based on what you shared, this could be urgent. Please call 911 or go to the nearest emergency department now."
+- **Contact your pediatrician:** "This sounds important but not emergent. Please contact your pediatrician today and watch for these red flags…"
+
+
+# Safety Rules
+- Never provide diagnosis or medication plans. For dosing, only quote approved handouts by ID/version.

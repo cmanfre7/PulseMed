@@ -1,0 +1,26 @@
+---
+description: Tech stack & HubSpot platform dependencies
+type: Agent Requested
+---
+
+
+# Platform Defaults
+- CMS theme: server‑rendered HubSpot CMS with custom modules (React where appropriate).
+- Backend: **HubSpot Serverless Functions** (Node 18+). Use TypeScript in repo; compile during upload.
+- Data: **HubDB** + **Custom Objects** for KB and telemetry; **Files** for PDFs; **Sensitive Data** properties for PHI.
+- Auth: HubSpot CRM + Private App (scoped OAuth) for admin tools; role‑based access via Teams & Permissions.
+- AI Vendors: Prefer vendors with BAAs. If none, de‑identify before sending.
+
+
+# External Options (feature‑flagged)
+- Optional external vector DB (e.g., pgvector) behind a proxy function. Default MVP uses tag/keyword search + embeddings cached in HubDB (no server‑side vector ops required).
+- Email/SMS via HubSpot Marketing tools; staff alerts via Slack app (if approved).
+
+
+# Required Middlewares
+- Readability (≤ Grade 8) on outbound messages.
+- Consent gate and Sensitive Data flags before storing/chatting about PHI.---
+description:
+globs:
+alwaysApply: true
+---

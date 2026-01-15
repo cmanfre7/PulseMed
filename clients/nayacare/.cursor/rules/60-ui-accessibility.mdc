@@ -1,0 +1,17 @@
+---
+description: UX & accessibility rules for chat widget and admin console
+type: Auto Attached
+globs:
+- "apps/web/**"
+- "apps/admin/**"
+---
+
+
+# Chat Widget
+- Mobile‑first; loads <2s on 4G; keyboard + screen‑reader accessible.
+- Consent banner prior to first message; persistent footer with scope disclaimer.
+- Provide quick‑links to “What’s normal vs. red flags,” self‑care checklist, and PDF download.
+
+
+# Admin Console
+- Role‑based views; show version diff for KB; push “safety notice” banner quickly site‑wide.

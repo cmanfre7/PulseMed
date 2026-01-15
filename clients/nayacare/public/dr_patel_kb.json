@@ -1,0 +1,73 @@
+{
+  "records": [
+    {
+      "id": "dr_patel_30_day_breastfeeding_blueprint_pdf",
+      "title": "30 Day Breastfeeding BluePrint",
+      "author": "Dr. Sonal Patel",
+      "content": "# 30-Day Breastfeeding Blueprint by Dr. Sonal Patel\n\n## Day 0-3: Getting Started\n- Golden hour: Immediate skin-to-skin contact for at least 1 hour\n- First latch within 2 hours of birth\n- Feed on demand, every 1-3 hours\n- Watch for hunger cues: rooting, sucking motions, hand-to-mouth\n\n## Day 4-7: Establishing Supply\n- Continue feeding on demand\n- Monitor wet diapers (should have 6+ per day by day 7)\n- Weight loss of 7-10% is normal\n- Cluster feeding is normal in evenings\n\n## Week 2-4: Building Confidence\n- Feeding patterns become more predictable\n- Growth spurts may cause increased feeding\n- Continue skin-to-skin contact\n- Watch for proper latch signs\n\n## Troubleshooting Common Issues\n- Engorgement: Cold compresses, gentle massage\n- Sore nipples: Check latch, use lanolin\n- Low supply concerns: Increase skin-to-skin, frequent feeding\n- Supplementation: Only when medically necessary\n\nThis comprehensive guide provides evidence-based guidance for successful breastfeeding in the first 30 days.",
+      "priority": 95,
+      "category": "breastfeeding",
+      "source": "dr_patel_pdf",
+      "tags": [
+        "breastfeeding",
+        "dr_patel",
+        "vetted",
+        "medical_guidance"
+      ],
+      "ageWindow": "0-12 weeks",
+      "audience": "both",
+      "riskLevel": "general",
+      "summary": "Medical guidance from Dr. Sonal Patel: 30 Day Breastfeeding BluePrint",
+      "published": true,
+      "relevanceScore": 0
+    },
+    {
+      "id": "dr_patel_peripartum_breastfeeding_management_pdf",
+      "title": "Peripartum Breastfeeding Management",
+      "author": "Dr. Sonal Patel",
+      "content": "# Peripartum Breastfeeding Management by Dr. Sonal Patel\n\n## Immediate Postpartum (0-2 hours)\n- Golden hour protocol: Uninterrupted skin-to-skin contact\n- Delay routine procedures until after first feeding\n- Support natural feeding instincts\n- Monitor for signs of readiness to feed\n\n## Hospital Stay Management\n- Rooming-in promotes feeding success\n- Avoid pacifiers and bottles unless medically necessary\n- Support for positioning and latch\n- Education on feeding cues and patterns\n\n## Early Discharge Planning\n- Ensure feeding is well-established\n- Provide written feeding plan\n- Schedule follow-up within 48 hours\n- Emergency contact information provided\n\n## Medical Considerations\n- Gestational diabetes management\n- Cesarean delivery considerations\n- Medication compatibility with breastfeeding\n- When supplementation may be necessary\n\nThis protocol ensures optimal breastfeeding initiation and early management.",
+      "priority": 95,
+      "category": "breastfeeding",
+      "source": "dr_patel_pdf",
+      "tags": [
+        "breastfeeding",
+        "dr_patel",
+        "vetted",
+        "medical_guidance"
+      ],
+      "ageWindow": "0-12 weeks",
+      "audience": "both",
+      "riskLevel": "general",
+      "summary": "Medical guidance from Dr. Sonal Patel: Peripartum Breastfeeding Management",
+      "published": true,
+      "relevanceScore": 0
+    },
+    {
+      "id": "dr_patel_supplementation_feeding_protocol_pdf",
+      "title": "Supplementation Feeding Protocol",
+      "author": "Dr. Sonal Patel",
+      "content": "# Supplementation Feeding Protocol by Dr. Sonal Patel\n\n## When Supplementation May Be Necessary\n- Weight loss >10% by day 5\n- Inadequate wet diapers (<6 by day 7)\n- Medical conditions affecting feeding\n- Maternal medication concerns\n- Delayed milk production\n\n## Supplementation Methods\n- Syringe feeding (preferred method)\n- Cup feeding for older infants\n- Finger feeding technique\n- Bottle feeding as last resort\n\n## Protocol Guidelines\n- Always attempt breastfeeding first\n- Use expressed breast milk when available\n- Consider donor milk for high-risk infants\n- Formula as medical necessity only\n\n## Monitoring and Follow-up\n- Daily weight checks during supplementation\n- Monitor feeding effectiveness\n- Gradual reduction of supplements as milk supply increases\n- Regular reassessment of need\n\n## Safety Considerations\n- Proper preparation and storage\n- Hygiene protocols\n- Temperature monitoring\n- Feeding position and pace\n\nThis evidence-based protocol ensures safe and effective supplementation when medically necessary.",
+      "priority": 95,
+      "category": "breastfeeding",
+      "source": "dr_patel_pdf",
+      "tags": [
+        "breastfeeding",
+        "dr_patel",
+        "vetted",
+        "medical_guidance"
+      ],
+      "ageWindow": "0-12 weeks",
+      "audience": "both",
+      "riskLevel": "general",
+      "summary": "Medical guidance from Dr. Sonal Patel: Supplementation Feeding Protocol",
+      "published": true,
+      "relevanceScore": 0
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2025-10-22T01:53:52.642Z",
+    "totalEntries": 3,
+    "source": "AI Intellect Pool - Dr. Patel PDFs",
+    "priority": "high"
+  }
+}

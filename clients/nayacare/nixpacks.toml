@@ -1,0 +1,14 @@
+# Nixpacks configuration for Railway
+# Ensures Tesseract OCR and GraphicsMagick are installed
+
+[phases.setup]
+nixPkgs = ["...", "tesseract", "graphicsmagick", "ghostscript"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"

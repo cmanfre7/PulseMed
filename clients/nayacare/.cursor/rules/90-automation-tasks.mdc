@@ -1,0 +1,22 @@
+---
+description: Common AI tasks via @ruleName (HubSpot flavored)
+type: Manual
+---
+
+
+@scaffold:mvp
+- Create CMS theme with `cms/modules/chatbot` and upload via CLI.
+- Initialize HubDB tables + Custom Object `kb_item` with required properties.
+- Provision Private App, scopes, and Serverless Functions (`functions/chat`, `functions/pdf`, `functions/ingest`).
+
+
+@create:kb-item
+- Generate a new KB entry row with full metadata and draft content; route to reviewer in a Workflow.
+
+
+@wire:escalation
+- Configure newborn & maternal red‑flag detectors; connect to **Workflows** that create Tickets/Tasks for staff.
+
+
+@report:observability
+- Produce a dashboard spec using Custom Reports & Lists for latency proxies, citation coverage, and red‑flags.

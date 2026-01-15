@@ -1,0 +1,184 @@
+================================================================================
+NAYACARE LEGAL DOCUMENTS FOR EDITING
+================================================================================
+
+This file contains the current Terms of Service and Privacy Policy text
+for Dr. Sonal Patel's 4th Trimester Guide (NayaCare).
+
+These documents are displayed to users in the consent modal after authentication.
+
+Current Version: 1.0.0
+Last Updated: November 8, 2025
+Location in Code: src/App.jsx (ConsentModal component, lines 1559-1646)
+
+================================================================================
+DOCUMENT 1: TERMS OF SERVICE
+================================================================================
+
+Title: Terms of Service - Dr. Sonal Patel's 4th Trimester Guide
+
+----------------------------------------------------------------------
+⚠️ IMPORTANT MEDICAL DISCLAIMER (RED ALERT BOX)
+----------------------------------------------------------------------
+This service provides educational information only and does not replace
+professional medical care. Always consult with your healthcare provider
+for medical advice, diagnosis, or treatment.
+
+----------------------------------------------------------------------
+1. Service Description
+----------------------------------------------------------------------
+Dr. Sonal Patel's 4th Trimester Guide is an educational chatbot designed
+to provide general information about postpartum care, newborn care, and
+related topics. This service is intended for educational purposes only
+and does not constitute medical advice, diagnosis, or treatment.
+
+----------------------------------------------------------------------
+2. Medical Disclaimer
+----------------------------------------------------------------------
+Important Limitations:
+• This service does not replace professional medical care
+• Information provided is general and educational only
+• Always consult your healthcare provider for medical concerns
+• In case of emergency, call 911 immediately
+• Do not delay seeking medical care based on information from this service
+
+----------------------------------------------------------------------
+3. User Responsibilities
+----------------------------------------------------------------------
+By using this service, you agree to use it for educational purposes only,
+not rely on it for medical diagnosis or treatment, seek professional
+medical care when needed, and respect the educational nature of the content.
+
+----------------------------------------------------------------------
+4. Limitation of Liability
+----------------------------------------------------------------------
+Dr. Sonal Patel and associated parties shall not be liable for any direct,
+indirect, incidental, special, or consequential damages arising from the
+use of this service.
+
+----------------------------------------------------------------------
+5. Contact Information
+----------------------------------------------------------------------
+For questions about these terms or the service, please contact Dr. Sonal
+Patel's office directly. This service is provided as a supplement to, not
+a replacement for, professional medical care.
+
+----------------------------------------------------------------------
+ACCEPTANCE STATEMENT
+----------------------------------------------------------------------
+By using this service, you acknowledge that you have read, understood,
+and agree to be bound by these Terms of Service.
+
+
+================================================================================
+DOCUMENT 2: PRIVACY POLICY
+================================================================================
+
+Title: Privacy Policy - Dr. Sonal Patel's 4th Trimester Guide
+
+----------------------------------------------------------------------
+🔒 YOUR PRIVACY MATTERS (BLUE INFO BOX)
+----------------------------------------------------------------------
+We are committed to protecting your privacy and personal information.
+This policy explains how we collect, use, and safeguard your data when
+using our educational service.
+
+----------------------------------------------------------------------
+1. Information We Collect
+----------------------------------------------------------------------
+We collect chat messages for educational responses, usage data for
+service improvement, and technical information for security purposes.
+No personal health information is required to use this service.
+
+----------------------------------------------------------------------
+2. How We Use Your Information
+----------------------------------------------------------------------
+We use your information to provide educational responses, improve
+service quality, ensure security, and comply with legal requirements.
+We do not sell or share your personal information.
+
+----------------------------------------------------------------------
+3. Data Protection
+----------------------------------------------------------------------
+🔒 Security Features:
+• Encryption in transit (TLS/SSL)
+• Secure data storage with access controls
+• Data minimization practices
+• Limited access to personal information
+
+----------------------------------------------------------------------
+4. Data Retention
+----------------------------------------------------------------------
+We retain your data for up to 7 days unless you consent to longer
+retention for service improvement purposes.
+
+----------------------------------------------------------------------
+5. Your Rights
+----------------------------------------------------------------------
+You have the right to access, correct, delete your data, withdraw
+consent, and lodge complaints with supervisory authorities.
+
+----------------------------------------------------------------------
+6. Contact Us
+----------------------------------------------------------------------
+If you have questions about this Privacy Policy, please contact
+Dr. Sonal Patel's office directly.
+
+----------------------------------------------------------------------
+ACCEPTANCE STATEMENT
+----------------------------------------------------------------------
+By using this service, you acknowledge that you have read and
+understood this Privacy Policy.
+
+
+================================================================================
+EDITING INSTRUCTIONS FOR DR. PATEL
+================================================================================
+
+1. WHAT TO EDIT:
+   - Review all sections for medical/legal accuracy
+   - Update contact information if needed
+   - Modify disclaimers to match your practice's policies
+   - Add or remove limitations as appropriate
+   - Ensure alignment with your practice's liability insurance requirements
+
+2. WHAT NOT TO CHANGE (without developer consultation):
+   - Document structure (section numbering)
+   - Acceptance statements (used by the app for tracking)
+   - Version number format (handled by developers)
+
+3. AFTER EDITING:
+   - Send the edited version back to the development team
+   - Developers will update the code in src/App.jsx
+   - Version number will be incremented (e.g., 1.0.0 → 1.1.0)
+   - All users will be re-prompted to accept updated terms
+
+4. VERSION CONTROL:
+   - Current version: 1.0.0
+   - When you update these documents, the version number increases
+   - Users who accepted previous versions will see the new consent modal
+   - Consent acceptance is tracked in HubSpot with version numbers
+
+5. HIPAA COMPLIANCE NOTES:
+   - These documents are part of HIPAA compliance framework
+   - Consent acceptance is logged with timestamp, IP, and version
+   - Audit trail is maintained in HubSpot for 6+ years
+   - Changes should be reviewed by legal counsel if needed
+
+================================================================================
+QUESTIONS OR CONCERNS?
+================================================================================
+
+Contact the development team with any questions about:
+- How these documents are displayed to users
+- Version control and user re-prompting
+- HIPAA compliance requirements
+- Technical implementation details
+
+Development Team: Chris Manfredonia
+Last Generated: November 8, 2025
+File Location: /Users/cmanfre/Desktop/Projects/nayacare/LEGAL_DOCUMENTS_FOR_EDITING.txt
+
+================================================================================
+END OF DOCUMENT
+================================================================================

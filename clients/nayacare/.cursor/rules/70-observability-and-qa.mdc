@@ -1,0 +1,15 @@
+---
+description: Telemetry, scenario tests, and release gates
+type: Always
+alwaysApply: true
+---
+
+
+# Observability
+- Capture de‑identified transcripts by default; support redaction tools.
+- Dashboards: latency (P50/P95), error rate, citation coverage, red‑flag triggers.
+
+
+# QA Gates (CI)
+- Run ≥50 red‑flag + maternal scenarios on each PR.
+- Track: ≥95% helpfulness on common Qs (clinician‑rated), hallucinations ≤2%.

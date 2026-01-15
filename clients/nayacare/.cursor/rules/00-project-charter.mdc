@@ -1,0 +1,33 @@
+---
+description: Global charter & safety guardrails for SPEC‑1—Dr. Patel 4th‑Trimester Tutor Chatbot
+type: Always
+alwaysApply: true
+---
+
+
+# Purpose
+Build an educational postpartum tutor chatbot for new parents (0–12+ weeks) that triages to **education vs. seek‑care‑now** messaging. This project **does not** diagnose, prescribe, or replace medical care.
+
+
+# Non‑negotiables
+- Always include a visible “does not replace care” footer in chat UI and PDFs.
+- Guardrails: no diagnosis, no prescriptions, no med dosing unless from **approved handouts**.
+- Tone: empathetic, calming, plain‑language (≤ Grade‑8 reading level). Enforce readability checks.
+- Safety: include newborn & maternal **red‑flag** flows that escalate with urgent language when triggered.
+- HIPAA posture: data minimization (no PHI unless user opts in), TLS in transit, AES‑256 at rest, RBAC, audit, configurable retention (default ≤7d), BAAs with vendors.
+
+
+# MVP Acceptance (baked‑in for PR reviews)
+- P95 end‑to‑first‑token ≤3s; P95 full answer ≤8s.
+- 24/7 availability; uptime ≥99.5% monthly.
+- Hallucination rate <2% on curated review set; ≥80% answers cite vetted KB when available.
+- PDFs render <5s and include accessible tagging; download links expire ≤24h.
+
+
+# Developer Guidance
+- Prioritize physician‑vetted KB content. Only fall back to general references for low‑risk education, always cited.
+- All PRs that touch chat logic must include: (1) a red‑flag unit test, (2) a readability check, (3) a safety note in description.---
+description:
+globs:
+alwaysApply: true
+---

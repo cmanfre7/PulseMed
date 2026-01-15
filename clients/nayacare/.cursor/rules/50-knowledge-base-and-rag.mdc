@@ -1,0 +1,23 @@
+---
+description: KB ingestion, metadata, retrieval policy (HubSpot HubDB/Custom Objects)
+type: Auto Attached
+globs:
+- "functions/ingest/**"
+- "functions/chat/**"
+- "hubdb/**"
+---
+
+
+# Ingestion
+- Parse PDFs/DOCX/HTML; extract text + metadata; store in **HubDB** tables or **Custom Object** `kb_item`.
+- Version each item with `version` and retain history.
+
+
+# Required Metadata
+`topic, audience (infant|birthing_parent), ageWindow, riskLevel (general|highRisk), summary, author, reviewedBy, reviewDate, expiryDate, sourceUrl, tags, embedding (optional JSON)`
+
+
+# Retrieval Policy
+- Prefer in‑house KB. When external sources are used, cite clearly.
+- MVP retrieval: tag/keyword + semantic reranking in the function (cosine on embeddings in memory). If vector DB is enabled, use it behind the proxy.
+- Low confidence or red‑flag ⇒ escalate per templates.

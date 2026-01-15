@@ -1,0 +1,142 @@
+{
+  "name": "kb_items",
+  "label": "Knowledge Base Items",
+  "columns": [
+    {
+      "name": "topic",
+      "label": "Topic",
+      "type": "text",
+      "options": {
+        "required": true
+      }
+    },
+    {
+      "name": "audience",
+      "label": "Audience",
+      "type": "select",
+      "options": {
+        "required": true,
+        "choices": [
+          {
+            "label": "Infant",
+            "value": "infant"
+          },
+          {
+            "label": "Birthing Parent",
+            "value": "birthing_parent"
+          },
+          {
+            "label": "Both",
+            "value": "both"
+          }
+        ]
+      }
+    },
+    {
+      "name": "age_window",
+      "label": "Age Window",
+      "type": "text",
+      "options": {
+        "help_text": "e.g., '0-3 months', '0-12 weeks'"
+      }
+    },
+    {
+      "name": "risk_level",
+      "label": "Risk Level",
+      "type": "select",
+      "options": {
+        "required": true,
+        "choices": [
+          {
+            "label": "General",
+            "value": "general"
+          },
+          {
+            "label": "High Risk",
+            "value": "high_risk"
+          }
+        ]
+      }
+    },
+    {
+      "name": "summary",
+      "label": "Summary",
+      "type": "text",
+      "options": {
+        "required": true,
+        "help_text": "Brief summary of the content"
+      }
+    },
+    {
+      "name": "content",
+      "label": "Content",
+      "type": "richtext",
+      "options": {
+        "required": true
+      }
+    },
+    {
+      "name": "author",
+      "label": "Author",
+      "type": "text",
+      "options": {
+        "required": true
+      }
+    },
+    {
+      "name": "reviewed_by",
+      "label": "Reviewed By",
+      "type": "text"
+    },
+    {
+      "name": "review_date",
+      "label": "Review Date",
+      "type": "date"
+    },
+    {
+      "name": "expiry_date",
+      "label": "Expiry Date",
+      "type": "date",
+      "options": {
+        "help_text": "When this content should be reviewed/updated"
+      }
+    },
+    {
+      "name": "source_url",
+      "label": "Source URL",
+      "type": "url"
+    },
+    {
+      "name": "tags",
+      "label": "Tags",
+      "type": "text",
+      "options": {
+        "help_text": "Comma-separated tags for search"
+      }
+    },
+    {
+      "name": "version",
+      "label": "Version",
+      "type": "text",
+      "options": {
+        "default": "1.0"
+      }
+    },
+    {
+      "name": "embedding",
+      "label": "Embedding",
+      "type": "text",
+      "options": {
+        "help_text": "JSON string of vector embedding for semantic search"
+      }
+    },
+    {
+      "name": "is_active",
+      "label": "Active",
+      "type": "boolean",
+      "options": {
+        "default": true
+      }
+    }
+  ]
+}

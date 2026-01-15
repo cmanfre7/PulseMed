@@ -1,0 +1,30 @@
+# Cursor AI Rules for NayaCare Project
+
+## 🤖 CRITICAL INSTRUCTIONS
+
+**READ README.md FIRST** - This file contains the complete project documentation including:
+- Project overview and technical architecture  
+- Current critical issues that need fixing
+- All important URLs and deployment procedures
+- Troubleshooting guides and requirements
+
+## 🎯 Project Context
+
+This is an educational postpartum tutor chatbot for new parents (0-12+ weeks) that integrates with Dr. Sonal Patel's medical practice via HubSpot.
+
+## ⚠️ Current Critical Issues
+
+1. **HubSpot Widget Integration Problems** - Button styling doesn't match Vercel design
+2. **Embed Mode Implementation** - Modal system is incomplete  
+3. **Button Functionality** - Opens demo page instead of full chatbot
+
+## 📋 Development Guidelines
+
+- Always reference README.md before making changes
+- Follow the technical architecture outlined in README.md
+- Test changes thoroughly before deployment
+- Maintain HIPAA compliance and security requirements
+
+## 🚨 DO NOT PROCEED WITHOUT READING README.md
+
+The README.md file contains everything needed to understand this project's current state and requirements.

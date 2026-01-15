@@ -1,0 +1,35 @@
+---
+description: Target architecture & boundaries (HubSpot‑first)
+type: Agent Requested
+---
+
+
+# System Overview (HubSpot)
+- **HubSpot CMS** hosts the public site and the embedded chat widget (custom module) with consent gate.
+- **HubSpot CRM** stores contacts and (optionally) PHI using Sensitive Data categories.
+- **HubSpot Serverless Functions** (Private App) orchestrate chat, safety triage, retrieval, and PDF generation.
+- **Workflows** handle non‑urgent escalations to staff queues; **Conversations Inbox** optional for human follow‑ups.
+- **HubDB / Custom Objects** store the vetted knowledge base and metadata; **Files** for PDFs with expiring links.
+
+
+# Boundaries
+- Education & risk screening only. No EMR/EHR integration in MVP. Limit PHI collection to explicit consent.
+- If any data leaves HubSpot (e.g., to an LLM), it must be de‑identified **or** sent only to vendors with a signed BAA.
+
+
+# Components (suggested structure)
+- `cms/modules/chatbot` – chat widget custom module (accessibility‑first)
+- `functions/chat` – orchestrator, safety triage, retrieval, prompt building
+- `functions/pdf` – server‑side PDF renderer from templates
+- `functions/ingest` – KB ingestion/parsing into HubDB/Custom Object
+- `hubdb/kb` – KB tables (+ relationships)
+- `private-app` – scopes, secrets, webhooks
+
+
+# Quality Gates
+- Scenario test harness runs via CI hitting HubSpot Serverless Functions (preview env).
+- PII/PHI redaction in prompts/logs; consent property required before storing any Sensitive Data.---
+description:
+globs:
+alwaysApply: true
+---
