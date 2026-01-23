@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run kb:build && vite build",
-    "kb:build": "node scripts/build-kb-index.cjs",
+    "build": "vite build",
+    "kb:build": "echo 'KB build skipped - no scripts yet'",
     "kb:ingest": "node scripts/ingest-pdfs.js",
     "preview": "vite preview",
     "start": "node server.js"
