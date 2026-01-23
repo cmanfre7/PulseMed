@@ -1,5 +1,5 @@
 [build]
-builder = "nixpacks"
+builder = "railpack"
 dockerfilePath = ""
 buildCommand = "npm install && npm run build --workspace=@pulsemed/client-hippreservation"
 
