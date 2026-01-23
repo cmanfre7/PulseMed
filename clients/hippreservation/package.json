@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "echo 'Server app - no build needed'",
     "kb:build": "echo 'KB build skipped - no scripts yet'",
     "kb:ingest": "node scripts/ingest-pdfs.js",
     "preview": "vite preview",
