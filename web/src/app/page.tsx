@@ -26,7 +26,17 @@ When you watch him right now:
 • Have you noticed any color changes around his lips or face?`;
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-50">
+    <div className="relative min-h-screen bg-slate-900 text-slate-50">
+      {/* Background SVG with reduced opacity */}
+      <div 
+        className="fixed inset-0 -z-10 opacity-20"
+        style={{
+          backgroundImage: 'url(/background.svg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
       {/* Navigation */}
       <header className="border-b border-slate-800/80 bg-slate-900/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
