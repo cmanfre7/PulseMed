@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+dockerfilePath = ""
+buildCommand = "npm install && npm run build --workspace=@pulsemed/client-hippreservation"
+
+[deploy]
+startCommand = "node clients/hippreservation/server.js"
