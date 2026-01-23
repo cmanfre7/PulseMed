@@ -1,194 +1,387 @@
-# PulseMed Developer Guide
+# PulseMed Developer & Deployment Guide
 
-## 🎯 For New Developers Working on Client Projects
-
-Welcome! This guide explains how PulseMed is structured and how to build new client applications.
+**Single Source of Truth** for developing and deploying PulseMed clients.
 
 ---
 
 ## 📁 Repository Structure
 
+PulseMed is an **npm workspaces monorepo**:
+
 ```
 PulseMed/
 ├── packages/
-│   └── core/                    # 🔧 SHARED FRAMEWORK (don't modify unless adding universal features)
-│       ├── api/chat.js          # AI chat engine
-│       ├── server.js            # Express server utilities
+│   └── core/                    # 🔧 SHARED FRAMEWORK (@pulsemed/core)
+│       ├── api/                 # AI chat engine, server utilities
+│       ├── server.js            # Express server setup
 │       ├── config.js            # Configuration loading
-│       └── types/               # Type definitions
+│       └── types/                # Type definitions
 │
 ├── clients/
-│   ├── nayacare/                # 👶 NAYACARE (PRODUCTION - HubSpot)
-│   │   └── ...                  # Complete, don't modify unless necessary
+│   ├── nayacare/                # 👶 NAYACARE (PRODUCTION - separate repo)
+│   │   └── ...                  # Deployed from separate GitHub repo
 │   │
-│   └── hippreservation/         # 🦴 HIP PRESERVATION (IN DEVELOPMENT - Wix)
+│   └── hippreservation/         # 🦴 HIP PRESERVATION (IN DEVELOPMENT)
 │       ├── config.json          # Client configuration
 │       ├── knowledge-base/      # PDF documents
 │       ├── prompts/             # System prompt customizations
 │       ├── overrides/           # Client-specific code
-│       └── src/                 # React frontend
+│       ├── src/                  # React frontend
+│       ├── server.js             # Express server entry point
+│       ├── railway.toml          # Railway deployment config
+│       └── package.json          # Dependencies (uses workspace:*)
 │
 ├── web/                         # 🌐 Marketing website (Next.js)
 │
-└── Markdowns/                   # 📄 Business documentation
+└── package.json                 # Workspace root configuration
 ```
 
 ---
 
 ## ⚠️ Important Rules
 
-### 1. DO NOT TOUCH `/nayacare`
-NayaCare is a **production application** for a different client (pediatrics). It uses HubSpot and has completely different features. Leave it alone.
+### 1. DO NOT MODIFY `/clients/nayacare`
+NayaCare is a **production application** deployed from a separate repository. It uses HubSpot and has completely different features. Leave it alone.
 
 ### 2. Client Code Goes in `/clients/{client-name}/`
-Each client gets their own folder under `/clients/`. All work for that client stays in their folder:
+Each client gets their own folder. All work for that client stays in their folder:
 - Configuration → `config.json`
 - Knowledge base → `knowledge-base/`
 - UI customizations → `src/`
 - Custom features → `overrides/`
-
-**Current clients:**
-- `nayacare/` - NayaCare Pediatrics (HubSpot) - **PRODUCTION**
-- `hippreservation/` - Hip Preservation Orthopedic Surgery (Wix) - **IN DEVELOPMENT**
 
 ### 3. Core Changes Require Discussion
 If you think something should be added to `packages/core/`, discuss it first. Core changes affect ALL future clients.
 
 ---
 
-## 🦴 Current Project: Hip Preservation
+## 🚀 Local Development
 
-> This section documents the **current active client**. Future clients will have similar structure but different configs.
+### Setup
 
-### Tech Stack
-- **Frontend**: React + Vite + Tailwind CSS
-- **Backend**: Node.js + Express
-- **AI**: Claude (Anthropic)
-- **CRM**: Wix (NOT HubSpot)
-- **Hosting**: TBD (Railway or client's preference)
+```bash
+# From monorepo root
+cd /Volumes/Coderbase/Projects/PulseMed
 
-### Key Files
+# Install all dependencies (resolves workspace dependencies)
+npm install
 
-| File | Purpose |
-|------|---------|
-| `config.json` | All client settings (branding, AI behavior, triage rules) |
-| `prompts/system-prompt.md` | Additional AI instructions for orthopedics |
-| `knowledge-base/*.pdf` | Surgeon's documents the AI references |
-| `src/App.jsx` | Main React application |
+# Run client locally
+npm run dev:hip
+# Or: npm run dev --workspace=clients/hippreservation
+```
 
-### Configuration (`config.json`)
+### Development Commands
+
+```bash
+# From monorepo root
+npm run dev:hip              # Start hippreservation dev server
+npm run build:all            # Build all clients
+npm run start:hip            # Start hippreservation production server
+
+# From client directory
+cd clients/hippreservation
+npm run dev                  # Start Vite dev server
+npm run build                # Build for production
+npm run kb:ingest            # Process knowledge base PDFs
+```
+
+---
+
+## 🚂 Railway Deployment (Current Setup)
+
+**PulseMed uses Railway to deploy clients from the monorepo.**
+
+### How It Works
+
+1. Railway connects to the `PulseMed` GitHub repository
+2. Each client is deployed as a separate service in the same Railway project
+3. Services use workspace commands to build/start from monorepo root
+4. Root directory is set to `.` (monorepo root) so workspace dependencies resolve
+
+### Step-by-Step: Deploying a New Client
+
+#### 1. Create Service in Railway
+
+- Go to your Railway project (e.g., "PulseMedWeb")
+- Click **"+ Create"** → **"GitHub Repo"**
+- Select `cmanfre7/PulseMed`
+- Railway will create a service (may have random name)
+
+#### 2. Rename Service (Optional)
+
+- Click on the service → Settings → General
+- Rename to: `hippreservation` or `client-hippreservation`
+
+#### 3. Configure Source
+
+**Settings → Source:**
+- **Root Directory**: `.` (just a dot - monorepo root)
+- **Branch**: `main`
+- **Wait for CI**: Off (unless you use GitHub Actions)
+
+#### 4. Configure Build
+
+**Settings → Build:**
+- **Builder**: Ensure "Nixpacks" or "Railpack" is selected (NOT Dockerfile)
+- **Custom Build Command**: `npm install && npm run build --workspace=@pulsemed/client-hippreservation`
+  - This installs from root (resolves workspace deps) then builds the client
+
+**IMPORTANT**: If Railway detects a Dockerfile, delete it. Client deployments must use Nixpacks.
+
+#### 5. Configure Deploy
+
+**Settings → Deploy:**
+- **Custom Start Command**: `node clients/hippreservation/server.js`
+  - Uses direct path (workspace commands don't work in start phase)
+
+#### 6. Add Environment Variables
+
+**Variables tab:**
+- `USE_VENDOR_LLM=true`
+- `VENDOR_API_KEY=sk-ant-...` (Anthropic API key)
+- `NODE_ENV=production`
+- Any other client-specific variables
+
+#### 7. Deploy
+
+- Click **"Deploy"** button
+- Railway will:
+  1. Run `npm install` from monorepo root (resolves `workspace:*` dependencies)
+  2. Run build command (builds the client)
+  3. Run start command (starts the client)
+
+### Railway Configuration File
+
+Each client has a `railway.toml` in their directory (optional):
+
+```toml
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && npm run build --workspace=@pulsemed/client-hippreservation"
+
+[deploy]
+startCommand = "node clients/hippreservation/server.js"
+```
+
+**Note**: Railway dashboard settings override `railway.toml`. Use dashboard settings for most reliable deployment.
+
+### Watch Paths (Optional)
+
+**Settings → Build → Watch Paths:**
+- Add: `/clients/hippreservation/**`
+- This triggers redeploy only when client files change
+
+---
+
+## 🎨 Client Configuration
+
+### config.json Structure
+
+Each client has a `config.json` file:
 
 ```json
 {
   "clientId": "hippreservation",
   "clientName": "Hip Preservation Orthopedic Surgery",
+  "displayName": "HipGuide",
+  "specialty": "orthopedics",
   "platform": "wix",
   
   "branding": {
-    "primaryColor": "#4a1c7c",    // Purple
-    "accentColor": "#c9a227",     // Gold
-    "chatbotName": "HipGuide"
+    "primaryColor": "#4a1c7c",
+    "accentColor": "#c9a227",
+    "chatbotName": "HipGuide",
+    "welcomeMessage": "Hi! I'm HipGuide..."
+  },
+  
+  "features": {
+    "chat": true,
+    "imageAnalysis": false,
+    "patientLogging": false,
+    "adminDashboard": true
   },
   
   "ai": {
+    "model": "claude-sonnet-4-5-20250929",
     "systemPromptAdditions": [
       "You specialize in hip preservation surgery recovery..."
     ]
   },
   
   "triage": {
-    "emergencyKeywords": ["blood clot", "DVT", "severe pain", ...]
+    "emergencyKeywords": ["blood clot", "DVT", "severe pain"]
   }
 }
 ```
 
+### Key Configuration Areas
+
+- **Branding**: Colors, logo, chatbot name, welcome message
+- **AI**: Model selection, system prompt additions, temperature
+- **Triage**: Emergency keywords, escalation messages
+- **Features**: Enable/disable features per client
+
 ---
 
-## 🚀 Getting Started
+## 📦 Workspace Dependencies
 
-### 1. Install Dependencies
+Clients reference the core framework via workspace protocol:
+
+```json
+{
+  "dependencies": {
+    "@pulsemed/core": "workspace:*"
+  }
+}
+```
+
+This means:
+- `npm install` from monorepo root resolves `@pulsemed/core` from `packages/core/`
+- No need to publish core separately for monorepo development
+- All clients share the same core version during development
+
+---
+
+## 🔧 Adding a New Client
+
+### 1. Create Client Directory
+
 ```bash
-cd /Users/cmanfre/Desktop/Projects/PulseMed/clients/hippreservation
-npm install
+mkdir clients/new-client-name
+cd clients/new-client-name
 ```
 
-### 2. Set Environment Variables
-Create `.env` file:
-```
-VENDOR_API_KEY=sk-ant-api03-...  # Anthropic API key
+### 2. Copy Template Structure
+
+Copy from `clients/hippreservation/`:
+- `config.json` (update with client details)
+- `package.json` (update name, keep `workspace:*` dependency)
+- `src/` directory structure
+- `railway.toml` (update workspace path)
+
+### 3. Configure Client
+
+- Edit `config.json` with client branding, AI prompts, triage rules
+- Add knowledge base PDFs to `knowledge-base/`
+- Customize UI in `src/`
+
+### 4. Add to Root package.json
+
+```json
+{
+  "scripts": {
+    "dev:new-client": "npm run dev --workspace=clients/new-client-name",
+    "start:new-client": "npm run start --workspace=clients/new-client-name"
+  }
+}
 ```
 
-### 3. Run Development Server
-```bash
-npm run dev
-```
+### 5. Deploy to Railway
 
-### 4. Add Knowledge Base Documents
-1. Get PDFs from the Hip Preservation surgical team
-2. Add them to `knowledge-base/`
-3. Run `npm run kb:ingest` to process them
+Follow the Railway deployment steps above.
 
 ---
 
-## 🎨 Customization Guide
+## 🐛 Troubleshooting
 
-### Branding (Colors, Logo)
-Edit `config.json` → `branding`:
-```json
-{
-  "branding": {
-    "primaryColor": "#4a1c7c",
-    "accentColor": "#c9a227",
-    "chatbotName": "HipGuide",
-    "welcomeMessage": "Hi! I'm HipGuide..."
-  }
-}
-```
+### "Unsupported URL Type workspace:*"
 
-### AI Behavior
-Edit `config.json` → `ai.systemPromptAdditions` or `prompts/system-prompt.md`:
-```json
-{
-  "ai": {
-    "systemPromptAdditions": [
-      "When discussing PAO recovery, emphasize the 6-12 week non-weight bearing period",
-      "Always recommend following the specific PT protocol from the surgical team"
-    ]
-  }
-}
-```
+**Problem**: Railway trying to install from client directory instead of root.
 
-### Emergency/Triage Rules
-Edit `config.json` → `triage`:
-```json
-{
-  "triage": {
-    "emergencyKeywords": ["blood clot", "DVT", "PE", "severe pain", "fever over 101"],
-    "escalationMessage": "🚨 Contact your surgeon immediately..."
-  }
-}
-```
+**Solution**: 
+- Set Root Directory to `.` (monorepo root) in Railway Settings → Source
+- Ensure build command includes `npm install` at the start
+- Use workspace package name: `@pulsemed/client-hippreservation`
 
-### UI Components
-Modify `src/App.jsx` and `src/index.css` for visual changes.
+### Railway Using Dockerfile Instead of Nixpacks
+
+**Problem**: Railway detects a Dockerfile and ignores nixpacks configuration.
+
+**Solution**:
+- Delete or rename any Dockerfile in the repository root
+- Railway will automatically fall back to Nixpacks
+- Check build logs to confirm "Using Nixpacks" or "Railpack"
+
+### "Cannot find module '/app/web/clients/...'"
+
+**Problem**: Railway is using Dockerfile which sets WORKDIR to `/app/web`.
+
+**Solution**:
+- Delete the Dockerfile from the repository
+- Use start command: `node clients/hippreservation/server.js` (direct path)
+- Root directory must be `.` (monorepo root)
+
+### Build Succeeds but Start Fails
+
+**Problem**: Workspace commands don't work in the start phase.
+
+**Solution**:
+- Use direct path in start command: `node clients/hippreservation/server.js`
+- Don't use `npm run start --workspace=...` in Railway start command
+
+### Service Has Random Name
+
+**Problem**: Railway auto-generates service names.
+
+**Solution**: 
+- Settings → General → Rename service to `hippreservation` or `client-hippreservation`
 
 ---
 
-## 📋 Development Checklist
+## 📋 Deployment Checklist
 
-Before deploying:
+Before deploying a client:
 
+- [ ] Root Directory set to `.` in Railway
+- [ ] Build command includes `npm install && npm run build --workspace=clients/{name}`
+- [ ] Start command is `npm run start --workspace=clients/{name}`
+- [ ] Environment variables configured
 - [ ] Knowledge base PDFs added and ingested
-- [ ] Emergency keywords tested (simulate "blood clot" message)
-- [ ] Branding matches hippreservation.org
-- [ ] Mobile responsive
-- [ ] Disclaimer visible in chat
-- [ ] Wix integration working (if applicable)
+- [ ] `config.json` configured with client details
+- [ ] Tested locally: `npm run dev:hip` works
+- [ ] Tested build: `npm run build --workspace=clients/hippreservation` works
 
 ---
 
-## 🆘 Questions?
+## 🆘 Support
 
 - **Framework questions**: Check `packages/core/README.md`
-- **Architecture questions**: Ask the PulseMed team
-- **Hip Preservation specific**: Contact the client's surgical team
+- **Railway issues**: Check Railway logs and settings
+- **Client-specific**: Check client's `README.md` in their directory
+
+---
+
+## 📚 Quick Reference
+
+### Monorepo Commands
+
+```bash
+# Install all dependencies
+npm install
+
+# Run client dev server
+npm run dev:hip
+
+# Build client
+npm run build --workspace=clients/hippreservation
+
+# Start client production server
+npm run start --workspace=clients/hippreservation
+
+# Build all clients
+npm run build:all
+```
+
+### Railway Settings Summary
+
+- **Root Directory**: `.` (monorepo root)
+- **Builder**: Nixpacks (NOT Dockerfile)
+- **Build Command**: `npm install && npm run build --workspace=@pulsemed/client-hippreservation`
+- **Start Command**: `node clients/hippreservation/server.js`
+- **Watch Paths**: `/clients/hippreservation/**` (optional - only redeploy when client changes)
+
+---
+
+**Last Updated**: January 2025  
+**Maintained by**: PulseMed Development Team
