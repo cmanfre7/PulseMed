@@ -3,7 +3,7 @@
  * Uses @pulsemed/core to create the server
  */
 
-import { createServer } from '@pulsemed/core/server.js';
+import { createServer } from '@pulsemed/core/server';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
