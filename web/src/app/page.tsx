@@ -412,21 +412,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Subtle heartbeat divider */}
-        <div className="px-6">
-          <div className="mx-auto max-w-xs">
-            <svg viewBox="0 0 200 30" className="w-full h-6 text-[#E11D48]/20">
-              <path
-                d="M0,15 L60,15 L80,5 L100,25 L120,10 L140,15 L200,15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        </div>
-
         {/* ANATOMY OF TRUST */}
         <section className="px-6 py-16 md:py-24">
           <div className="mx-auto max-w-6xl">
@@ -461,21 +446,6 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* Subtle heartbeat divider */}
-        <div className="px-6">
-          <div className="mx-auto max-w-xs">
-            <svg viewBox="0 0 200 30" className="w-full h-6 text-[#E11D48]/20">
-              <path
-                d="M0,15 L60,15 L80,5 L100,25 L120,10 L140,15 L200,15"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        </div>
 
         {/* METRICS */}
         <section className="px-6 py-16 md:py-24">
@@ -537,15 +507,6 @@ export default function Home() {
         <section className="px-6 py-16 md:py-24">
           <div className="mx-auto max-w-3xl text-center">
             <Reveal>
-              <svg viewBox="0 0 200 30" className="w-32 h-6 mx-auto mb-6 text-[#E11D48]/30">
-                <path
-                  d="M0,15 L60,15 L80,5 L100,25 L120,10 L140,15 L200,15"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
               <h2 className="font-[family-name:var(--font-dm-serif)] text-3xl sm:text-4xl text-[#1A1A1A] mb-4">
                 Ready to see PulseMed in your practice?
               </h2>
