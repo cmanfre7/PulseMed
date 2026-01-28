@@ -427,10 +427,14 @@ export default function Home() {
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
-            {["Platform", "For Practices", "Technology", "Pricing"].map((item) => (
-              <button key={item} className="text-sm text-[#64748B] hover:text-[#1A1A1A] transition-colors">
-                {item}
-              </button>
+            {[
+              { label: "Platform", href: "/" },
+              { label: "For Practices", href: "/for-practices" },
+              { label: "Technology", href: "/technology" },
+            ].map((item) => (
+              <a key={item.label} href={item.href} className="text-sm text-[#64748B] hover:text-[#1A1A1A] transition-colors">
+                {item.label}
+              </a>
             ))}
             <button className="rounded-full bg-[#0D9488] hover:bg-[#0F766E] px-5 py-2 text-sm font-medium text-white transition-colors">
               Schedule demo
