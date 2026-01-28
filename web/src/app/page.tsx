@@ -328,7 +328,7 @@ function ConversationCard({ scenario }: { scenario: typeof SCENARIOS[0] }) {
   }, []);
 
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm h-[420px] flex flex-col">
+    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-2">
@@ -341,7 +341,7 @@ function ConversationCard({ scenario }: { scenario: typeof SCENARIOS[0] }) {
       </div>
 
       {/* Messages */}
-      <div className="space-y-4 flex-1 overflow-hidden">
+      <div className="space-y-4 mb-4">
         {/* Patient */}
         <div className={`transition-all duration-600 ease-out ${stage >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
           <div className="bg-[#F1F5F9] rounded-2xl rounded-tl-sm px-4 py-3">
