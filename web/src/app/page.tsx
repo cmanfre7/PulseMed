@@ -386,7 +386,7 @@ function ConversationCard({ scenario }: { scenario: typeof SCENARIOS[0] }) {
           </button>
         </div>
       </div>
-    </div>
+    </GlassCard>
   );
 }
 
