@@ -1,33 +1,40 @@
-<svg viewBox="0 0 200 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- PulseMed Final Logo: Clean text + Shattered M -->
+<svg viewBox="0 0 200 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- PulseMed Final Logo: Dark slate text + Rose M with fading trace -->
   <defs>
-    <linearGradient id="roseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#E11D48"/>
-      <stop offset="100%" stop-color="#F43F5E"/>
+    <!-- Gradient for fading trace line -->
+    <linearGradient id="fadeTrace" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#E11D48" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#E11D48" stop-opacity="1"/>
     </linearGradient>
   </defs>
   
-  <!-- "Pulse" text -->
-  <text x="8" y="42" 
+  <!-- "Pulse" text in dark slate -->
+  <text x="12" y="35" 
     font-family="system-ui, -apple-system, sans-serif" 
-    font-size="32" 
+    font-size="28" 
     font-weight="600"
     letter-spacing="0.02em"
-    fill="url(#roseGrad)">Pulse</text>
+    fill="#1E293B">Pulse</text>
   
-  <!-- Fragmented M pulse -->
-  <g transform="translate(108, 0)">
-    <path d="M4 32 L11 32" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M13 32 L17 22" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M18 24 L22 40" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M23 38 L27 14" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M28 16 L32 50" stroke="#E11D48" stroke-width="4" stroke-linecap="round"/>
-    <path d="M33 48 L37 14" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M38 16 L42 38" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M43 36 L47 22" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M48 24 L52 32" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <path d="M54 32 L60 32" stroke="#E11D48" stroke-width="3" stroke-linecap="round"/>
-    <!-- Glitch echo -->
-    <path d="M28 18 L32 48" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-opacity="0.3" transform="translate(2, -1)"/>
+  <!-- Fading straight EKG trace line connecting to M -->
+  <path 
+    d="M0 39 L107 39" 
+    stroke="url(#fadeTrace)" 
+    stroke-width="2.5" 
+    stroke-linecap="round"
+    fill="none"
+  />
+  
+  <!-- M-shaped pulse in rose (baseline at y=39 to connect with trace) -->
+  <g transform="translate(105, 7)">
+    <path 
+      d="M2 32 L8 32 L12 32 L12 10 L22 38 L28 10 L34 38 L44 10 L44 32 L48 32 L54 32" 
+      stroke="#E11D48" 
+      stroke-width="3.5" 
+      stroke-linecap="round" 
+      stroke-linejoin="round"
+      fill="none"
+    />
   </g>
 </svg>

@@ -93,15 +93,20 @@ function SoftEKGBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // PQRST waveform
+    // M-shaped waveform (matches PulseM logo)
     const wave: number[] = [];
-    for (let i = 0; i < 40; i++) wave.push(0.5);
-    wave.push(0.5, 0.53, 0.56, 0.58, 0.56, 0.53, 0.5);
-    for (let i = 0; i < 10; i++) wave.push(0.5);
-    wave.push(0.5, 0.47, 0.42, 0.3, 0.1, 0.95, 1.0, 0.7, 0.35, 0.4, 0.47, 0.5);
-    for (let i = 0; i < 12; i++) wave.push(0.5);
-    wave.push(0.5, 0.54, 0.58, 0.62, 0.65, 0.62, 0.58, 0.54, 0.5);
-    for (let i = 0; i < 50; i++) wave.push(0.5);
+    for (let i = 0; i < 35; i++) wave.push(0.5);
+    // First peak of M - sharp rise
+    wave.push(0.5, 0.45, 0.38, 0.28, 0.15, 0.05);
+    // Valley between M peaks
+    wave.push(0.2, 0.4, 0.55, 0.7, 0.85);
+    // Center dip of M (goes down past baseline)
+    wave.push(0.95, 1.0, 0.95);
+    // Second peak of M
+    wave.push(0.85, 0.7, 0.55, 0.4, 0.2);
+    // Sharp descent from second peak
+    wave.push(0.05, 0.15, 0.28, 0.38, 0.45, 0.5);
+    for (let i = 0; i < 45; i++) wave.push(0.5);
 
     const waveLen = wave.length;
 
@@ -244,54 +249,115 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
 // CONVERSATION DEMO
 // ============================================================================
 
-function ConversationDemo() {
-  const [stage, setStage] = useState(0);
-
-  const response = `I'm really glad you reached out. It's stressful when something sounds off with their breathing, especially at night.
+const SCENARIOS = [
+  {
+    type: "Pediatrics",
+    user: "My 18-month-old has been coughing more tonight and it sounds different than usual. He doesn't seem super sick, but it's making me nervous.",
+    ai: `I'm really glad you reached out. It's stressful when something sounds off with their breathing.
 
 When you watch him right now:
 • Does his breathing look easy, or does it seem like he's working harder than usual?
 • When he's calm and resting, do you hear any noisy breathing, or is it mostly just the cough?
-• Is he still drinking and acting mostly like himself?
-• Have you noticed any color changes around his lips or face?`;
+• Is he still drinking and acting mostly like himself?`,
+    meta: {
+      source: "Practice protocol · Respiratory assessment v2.1",
+      triage: "Home observation with red flags",
+      phi: "0 patient identifiers sent"
+    }
+  },
+  {
+    type: "Post-op Orthopedics",
+    user: "I had my ACL repair 3 days ago. My knee feels really warm to the touch and the swelling seems worse tonight than it was this morning. Is that normal?",
+    ai: `It's good you're checking. While some swelling is expected, significant changes in warmth or swelling 3 days post-op need a closer look.
 
-  const { out, done } = useTyping(response, 18, stage >= 2 ? 400 : 99999);
+• Do you have a fever (temperature > 100.4°F)?
+• Is the redness spreading or streaking away from the incision?
+• Is there any new drainage or fluid leaking from the bandage?
+• Is your pain controlled with the current medication schedule?`,
+    meta: {
+      source: "Post-op Protocol · ACL Reconstruction Day 3",
+      triage: "Evaluate for infection/DVT",
+      phi: "Anonymized session ID: #8821"
+    }
+  },
+  {
+    type: "Obstetrics",
+    user: "I'm 34 weeks pregnant and I've had a headache for the past 3 hours that won't go away with Tylenol. My vision is a bit blurry too.",
+    ai: `Please pay close attention to this. A persistent headache with vision changes at 34 weeks requires immediate evaluation to rule out preeclampsia.
+
+• Do not wait until morning.
+• Please proceed to Labor & Delivery triage now for a blood pressure check.
+• Do you have safe transportation to the hospital right now?
+• I am flagging this interaction for the on-call physician.`,
+    meta: {
+      source: "ACOG Guidelines · Preeclampsia Screening",
+      triage: "Red Flag: Immediate Evaluation",
+      phi: "Urgent Escalation Triggered"
+    }
+  }
+];
+
+function ConversationDemo() {
+  const [index, setIndex] = useState(0);
+  const [key, setKey] = useState(0); // Forces remount to reset animations
 
   useEffect(() => {
-    const t1 = setTimeout(() => setStage(1), 800);
-    const t2 = setTimeout(() => setStage(2), 2200);
+    // Cycle to next scenario every 14 seconds
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % SCENARIOS.length);
+      setKey((prev) => prev + 1);
+    }, 14000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const scenario = SCENARIOS[index];
+
+  return (
+    <ConversationCard key={key} scenario={scenario} />
+  );
+}
+
+function ConversationCard({ scenario }: { scenario: typeof SCENARIOS[0] }) {
+  const [stage, setStage] = useState(0);
+  const { out, done } = useTyping(scenario.ai, 18, 2200);
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setStage(1), 800);  // Show user msg
+    const t2 = setTimeout(() => setStage(2), 2200); // Start AI typing
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm h-[420px] flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 shrink-0">
         <div className="flex items-center gap-2">
-          <span className="flex h-2 w-2 rounded-full bg-[#0D9488]" />
+          <span className="flex h-2 w-2 rounded-full bg-[#0D9488] animate-pulse" />
           <span className="text-sm text-[#64748B]">Live patient conversation</span>
         </div>
-        <span className="text-xs text-[#94A3B8]">PulseMed · Clinical AI</span>
+        <span className="text-xs font-medium text-[#0D9488] bg-[#F0FDFA] px-2 py-0.5 rounded-full">
+          {scenario.type}
+        </span>
       </div>
 
       {/* Messages */}
-      <div className="space-y-3">
+      <div className="space-y-4 flex-1 overflow-hidden">
         {/* Patient */}
-        <div className={`transition-all duration-600 ${stage >= 1 ? "opacity-100" : "opacity-0 translate-y-2"}`}>
+        <div className={`transition-all duration-600 ease-out ${stage >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
           <div className="bg-[#F1F5F9] rounded-2xl rounded-tl-sm px-4 py-3">
             <p className="text-sm text-[#1E293B] leading-relaxed">
-              My 18-month-old has been coughing more tonight and it sounds different than usual. He doesn't seem super sick, but it's making me nervous.
+              {scenario.user}
             </p>
           </div>
         </div>
 
         {/* AI */}
-        <div className={`transition-all duration-600 ${stage >= 2 ? "opacity-100" : "opacity-0 translate-y-2"}`}>
-          <div className="bg-[#0D9488] rounded-2xl rounded-tr-sm px-4 py-3">
+        <div className={`transition-all duration-600 ease-out ${stage >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+          <div className="bg-[#0D9488] rounded-2xl rounded-tr-sm px-4 py-3 shadow-md shadow-teal-900/5">
             <p className="text-sm text-white leading-relaxed whitespace-pre-line">
               {out}
-              {!done && stage >= 2 && (
-                <span className="inline-block w-0.5 h-4 bg-white/70 ml-0.5 animate-pulse" />
+              {!done && (
+                <span className="inline-block w-0.5 h-4 bg-white/70 ml-0.5 animate-pulse align-middle" />
               )}
             </p>
           </div>
@@ -299,21 +365,21 @@ When you watch him right now:
       </div>
 
       {/* Metadata */}
-      <div className={`mt-4 pt-4 border-t border-[#E2E8F0] transition-all duration-600 ${done ? "opacity-100" : "opacity-0"}`}>
+      <div className={`mt-4 pt-4 border-t border-[#E2E8F0] transition-all duration-700 ${done ? "opacity-100" : "opacity-0"}`}>
         <div className="grid grid-cols-3 gap-3 mb-3">
           {[
-            { label: "Knowledge source", value: "Practice protocol · Respiratory assessment v2.1" },
-            { label: "Triage status", value: "Home observation with red flags" },
-            { label: "PHI exposure", value: "0 patient identifiers sent" },
+            { label: "Knowledge source", value: scenario.meta.source },
+            { label: "Triage status", value: scenario.meta.triage },
+            { label: "PHI exposure", value: scenario.meta.phi },
           ].map((m) => (
             <div key={m.label}>
-              <p className="text-xs font-medium text-[#0D9488]">{m.label}</p>
-              <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{m.value}</p>
+              <p className="text-[10px] uppercase tracking-wider font-semibold text-[#0D9488]">{m.label}</p>
+              <p className="text-xs text-[#64748B] mt-0.5 leading-tight">{m.value}</p>
             </div>
           ))}
         </div>
         <div className="flex justify-center">
-          <button className="text-xs text-[#0D9488] hover:text-[#0F766E] px-4 py-2 rounded-full border border-[#0D9488]/30 hover:bg-[#F0FDFA] transition-colors">
+          <button className="text-xs text-[#0D9488] hover:text-[#0F766E] font-medium px-4 py-1.5 rounded-full border border-[#0D9488]/30 hover:bg-[#F0FDFA] transition-colors">
             View source protocol
           </button>
         </div>
@@ -335,19 +401,28 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-[#FAFAF7]/80 backdrop-blur-md border-b border-[#E2E8F0]">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-1">
-            <span className="text-xl font-semibold tracking-[0.02em] text-[#E11D48]">Pulse</span>
-            <svg viewBox="0 0 64 64" className="h-7 w-auto text-[#E11D48]">
-              <path d="M4 32 L11 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M13 32 L17 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M18 24 L22 40" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M23 38 L27 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M28 16 L32 50" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-              <path d="M33 48 L37 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M38 16 L42 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M43 36 L47 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M48 24 L52 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M54 32 L60 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-              <path d="M28 18 L32 48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.3" transform="translate(2, -1)"/>
+            <span className="text-xl font-semibold tracking-[0.02em] text-[#1E293B]">Pulse</span>
+            <svg viewBox="0 0 56 48" className="h-7 w-auto text-[#E11D48]">
+              {/* Clear M-shaped pulse: flat → up to peak → down to valley → up to peak → flat */}
+              <path 
+                d="M2 32 L8 32 L12 32 L12 10 L22 38 L28 10 L34 38 L44 10 L44 32 L48 32 L54 32" 
+                stroke="currentColor" 
+                strokeWidth="3.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                fill="none"
+              />
+              {/* Subtle glitch echo */}
+              <path 
+                d="M12 12 L22 36 L28 12" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+                strokeOpacity="0.2"
+                fill="none"
+                transform="translate(2, -1)"
+              />
             </svg>
           </div>
 
@@ -536,19 +611,16 @@ export default function Home() {
         <footer className="border-t border-[#E2E8F0] px-6 py-10">
           <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-1">
-              <span className="text-lg font-semibold tracking-[0.02em] text-[#E11D48]">Pulse</span>
-              <svg viewBox="0 0 64 64" className="h-5 w-auto text-[#E11D48]">
-                <path d="M4 32 L11 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M13 32 L17 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M18 24 L22 40" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M23 38 L27 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M28 16 L32 50" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
-                <path d="M33 48 L37 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M38 16 L42 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M43 36 L47 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M48 24 L52 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M54 32 L60 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                <path d="M28 18 L32 48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.3" transform="translate(2, -1)"/>
+              <span className="text-lg font-semibold tracking-[0.02em] text-[#1E293B]">Pulse</span>
+              <svg viewBox="0 0 56 48" className="h-5 w-auto text-[#E11D48]">
+                <path 
+                  d="M2 32 L8 32 L12 32 L12 10 L22 38 L28 10 L34 38 L44 10 L44 32 L48 32 L54 32" 
+                  stroke="currentColor" 
+                  strokeWidth="3.5" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                  fill="none"
+                />
               </svg>
             </div>
             <div className="flex gap-6 text-sm text-[#64748B]">
