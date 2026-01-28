@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { MeshGradientBackground, MultiLayerEKG, FloatingParticles, NoiseTexture } from "@/components/EnhancedBackground";
+import { MeshGradientBackground, SingleLayerEKG, NoiseTexture } from "@/components/EnhancedBackground";
 import { GlassCard, TiltCard } from "@/components/EnhancedCards";
 
 // ============================================================================
@@ -399,8 +399,7 @@ export default function Home() {
     <div className="relative min-h-screen bg-gradient-to-br from-[#FAFAF7] via-[#FFFFFF] to-[#F0FDFA]">
       {/* Enhanced multi-layer backgrounds */}
       <MeshGradientBackground />
-      <MultiLayerEKG />
-      <FloatingParticles />
+      <SingleLayerEKG />
       <NoiseTexture />
 
       {/* NAVIGATION */}

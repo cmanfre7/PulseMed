@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PulseMed Logo Concepts</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      padding: 40px;
+      background: #FAFAF7;
+      color: #1E293B;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .preview-card {
+      background: white;
+      padding: 60px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border: 1px solid #E2E8F0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-card.dark {
+      background: #1E293B;
+      border-color: #334155;
+    }
+    h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748B;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    .label {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #94A3B8;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Logo Redesign: Phase 3</h1>
+    <p style="color: #64748B; margin-bottom: 40px;">Modern geometric interpretation of the "Heart-M" layout.</p>
+    
+    <div class="preview-card">
+      <h2>V3: Modern Geometric Heart-M (Light)</h2>
+      <!-- Append timestamp to force refresh -->
+      <img src="pulsemed-logo-v3.svg?t=3" alt="PulseMed Logo V3" width="320">
+    </div>
+
+    <div class="preview-card dark">
+      <h2>V3: Modern Geometric Heart-M (Dark)</h2>
+      <img src="pulsemed-logo-v3.svg?t=3" alt="PulseMed Logo V3 Dark" width="320">
+    </div>
+  </div>
+  
+  <script>
+    // Force image reload just in case
+    document.querySelectorAll('img').forEach(img => {
+      img.src = img.src + '&r=' + Math.random();
+    });
+  </script>
+</body>
+</html>

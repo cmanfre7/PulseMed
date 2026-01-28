@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { MeshGradientBackground, SingleLayerEKG, NoiseTexture } from "@/components/EnhancedBackground";
 
 // ============================================================================
 // SHARED COMPONENTS
@@ -39,75 +40,6 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
       }}
     >
       {children}
-    </div>
-  );
-}
-
-function SoftEKGBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number>(0);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-
-    const resize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const wave: number[] = [];
-    for (let i = 0; i < 35; i++) wave.push(0.5);
-    wave.push(0.5, 0.45, 0.38, 0.28, 0.15, 0.05);
-    wave.push(0.2, 0.4, 0.55, 0.7, 0.85);
-    wave.push(0.95, 1.0, 0.95);
-    wave.push(0.85, 0.7, 0.55, 0.4, 0.2);
-    wave.push(0.05, 0.15, 0.28, 0.38, 0.45, 0.5);
-    for (let i = 0; i < 45; i++) wave.push(0.5);
-
-    const waveLen = wave.length;
-    const trace = { speed: 1.8, opacity: 0.08, y: 0.5, amplitude: 60, width: 2 };
-    let x = -100;
-    let waveIdx = 0;
-    let points: { x: number; y: number; age: number }[] = [];
-    let lastTime = performance.now();
-
-    const draw = (time: number) => {
-      const delta = Math.min(time - lastTime, 32);
-      lastTime = time;
-      ctx.clearRect(0, 0, width, height);
-      x += trace.speed * (delta / 16);
-      waveIdx = (waveIdx + trace.speed * 0.4 * (delta / 16)) % waveLen;
-      const waveVal = wave[Math.floor(waveIdx) % waveLen];
-      const baseY = height * trace.y;
-      const y = baseY + (waveVal - 0.5) * trace.amplitude * 2;
-      if (x > -50) points.push({ x, y, age: 0 });
-      points = points.map((p) => ({ ...p, age: p.age + delta })).filter((p) => p.age < 6000);
-      if (points.length > 1) {
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.beginPath();
-        points.forEach((p, j) => {
-          if (j === 0) ctx.moveTo(p.x, p.y);
-          else ctx.lineTo(p.x, p.y);
-        });
-        ctx.strokeStyle = `rgba(225, 29, 72, ${trace.opacity})`;
-        ctx.lineWidth = trace.width;
-        ctx.stroke();
-      }
-      if (x > width + 200) {
-        x = -200;
-        points = [];
-      }
       animationRef.current = requestAnimationFrame(draw);
     };
 
@@ -135,7 +67,9 @@ function SoftEKGBackground() {
 export default function Technology() {
   return (
     <div className="relative min-h-screen bg-[#FAFAF7]">
-      <SoftEKGBackground />
+      <MeshGradientBackground />
+      <SingleLayerEKG />
+      <NoiseTexture />
 
       {/* NAVIGATION */}
       <header className="sticky top-0 z-50 bg-[#FAFAF7]/80 backdrop-blur-md border-b border-[#E2E8F0]">
