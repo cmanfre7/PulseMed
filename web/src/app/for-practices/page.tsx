@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MeshGradientBackground, SingleLayerEKG, NoiseTexture } from "@/components/EnhancedBackground";
 
 // ============================================================================
-// SHARED COMPONENTS (copied from main page for consistency)
+// SHARED COMPONENTS
 // ============================================================================
 
 function useReveal(threshold = 0.1) {
@@ -40,23 +40,7 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
       }}
     >
       {children}
-      animationRef.current = requestAnimationFrame(draw);
-    };
-
-    animationRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      cancelAnimationFrame(animationRef.current);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
-    />
+    </div>
   );
 }
 
