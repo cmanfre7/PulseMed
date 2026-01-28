@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "PulseMed — Care That Never Sleeps",
+  title: "PulseMed — Physician-Controlled Medical AI Platform",
   description:
     "PulseMed is a white-label healthcare platform that provides 24/7 patient support through an AI assistant—operating within physician-defined boundaries, strict HIPAA safeguards, and no autonomous decision making.",
 };
@@ -28,9 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body
-        className={`${dmSerif.variable} ${inter.variable} font-sans antialiased bg-stone-50 text-stone-900`}
-      >
+      <body className={`${dmSerif.variable} ${inter.variable} font-sans antialiased bg-[#FAFAF7] text-[#1A1A1A]`}>
         {children}
       </body>
     </html>
