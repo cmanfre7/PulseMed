@@ -59,17 +59,7 @@ export default function Technology() {
       <header className="sticky top-0 z-50 bg-[#FAFAF7]/80 backdrop-blur-md border-b border-[#E2E8F0]">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-1">
-            <span className="text-xl font-semibold tracking-[0.02em] text-[#1E293B]">Pulse</span>
-            <svg viewBox="0 0 56 48" className="h-7 w-auto text-[#E11D48]">
-              <path 
-                d="M2 32 L8 32 L12 32 L12 10 L22 38 L28 10 L34 38 L44 10 L44 32 L48 32 L54 32" 
-                stroke="currentColor" 
-                strokeWidth="3.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-            </svg>
+            <img src="/logos/Logo.svg" alt="PulseMed" className="h-10 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">

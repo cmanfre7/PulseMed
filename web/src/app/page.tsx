@@ -406,29 +406,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-1">
-            <span className="text-xl font-semibold tracking-[0.02em] text-[#1E293B]">Pulse</span>
-            <svg viewBox="0 0 56 48" className="h-7 w-auto text-[#E11D48]">
-              {/* Clear M-shaped pulse: flat → up to peak → down to valley → up to peak → flat */}
-              <path 
-                d="M2 32 L8 32 L12 32 L12 10 L22 38 L28 10 L34 38 L44 10 L44 32 L48 32 L54 32" 
-                stroke="currentColor" 
-                strokeWidth="3.5" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                fill="none"
-              />
-              {/* Subtle glitch echo */}
-              <path 
-                d="M12 12 L22 36 L28 12" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-                strokeOpacity="0.2"
-                fill="none"
-                transform="translate(2, -1)"
-              />
-            </svg>
+            <img src="/logos/Logo.svg" alt="PulseMed" className="h-10 w-auto" />
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
