@@ -1,0 +1,37 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- CREATIVE 05: Infinity Loop Pulse - Continuous Care -->
+  <defs>
+    <linearGradient id="rose05" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="50%" stop-color="#F43F5E"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+  </defs>
+  <!-- Infinity symbol base -->
+  <path 
+    d="M32 32 
+       C32 32, 24 22, 16 22
+       C8 22, 4 28, 4 32
+       C4 36, 8 42, 16 42
+       C24 42, 32 32, 32 32
+       C32 32, 40 22, 48 22
+       C56 22, 60 28, 60 32
+       C60 36, 56 42, 48 42
+       C40 42, 32 32, 32 32"
+    stroke="#E11D48"
+    stroke-width="2"
+    stroke-opacity="0.25"
+    fill="none"
+  />
+  <!-- Pulse waveform following infinity path -->
+  <path 
+    d="M4 32 L10 32 L13 26 L16 38 L19 24 L22 36 L25 28 L28 32
+       L32 32
+       L36 32 L39 28 L42 36 L45 24 L48 38 L51 26 L54 32 L60 32"
+    stroke="url(#rose05)" 
+    stroke-width="3" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

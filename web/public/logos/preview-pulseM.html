@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PulseM Logo Concepts</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      min-height: 100vh;
+      padding: 48px;
+      color: white;
+    }
+    h1 { 
+      font-size: 48px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #E11D48, #F43F5E);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 48px;
+      font-size: 18px;
+    }
+    .subtitle span {
+      color: #E11D48;
+      font-weight: 600;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 1000px;
+    }
+    .card {
+      background: rgba(255,255,255,0.02);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(225, 29, 72, 0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(225, 29, 72, 0.15);
+    }
+    .logo-container {
+      height: 80px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .logo-container img {
+      height: 100%;
+      width: auto;
+    }
+    .version {
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+    .desc {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.5;
+    }
+    .showcase {
+      margin-top: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      max-width: 1000px;
+    }
+    .showcase-card {
+      padding: 48px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dark-bg {
+      background: #000;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .light-bg {
+      background: #fff;
+    }
+    .showcase-card img {
+      height: 64px;
+      width: auto;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(225, 29, 72, 0.15);
+      color: #E11D48;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 12px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <h1>PulseM</h1>
+  <p class="subtitle">"Pulse" + Fragmented <span>M</span> = PulseMed</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v1.svg" alt="V1">
+      </div>
+      <div class="version">V1 — Clean + Shattered <span class="badge">Simple</span></div>
+      <div class="desc">Clean "Pulse" text flowing into the fragmented M pulse</div>
+    </div>
+    
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v2.svg" alt="V2">
+      </div>
+      <div class="version">V2 — Glitched Text</div>
+      <div class="desc">Text has subtle glitch offset to match the M aesthetic</div>
+    </div>
+    
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v3.svg" alt="V3">
+      </div>
+      <div class="version">V3 — Full Fragmented <span class="badge">Cohesive</span></div>
+      <div class="desc">Every letter is fragmented to match — fully unified style</div>
+    </div>
+    
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v4.svg" alt="V4">
+      </div>
+      <div class="version">V4 — UPPERCASE Bold</div>
+      <div class="desc">Strong "PULSE" with tight kerning, connected baseline</div>
+    </div>
+    
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v5.svg" alt="V5">
+      </div>
+      <div class="version">V5 — Lowercase Flow <span class="badge">Elegant</span></div>
+      <div class="desc">Smooth "pulse" where baseline transforms into the M</div>
+    </div>
+    
+    <div class="card">
+      <div class="logo-container">
+        <img src="pulsemed-pulseM-v6.svg" alt="V6">
+      </div>
+      <div class="version">V6 — Full "PulseMed"</div>
+      <div class="desc">Complete wordmark where M is replaced by the pulse</div>
+    </div>
+  </div>
+
+  <div class="showcase">
+    <div class="showcase-card dark-bg">
+      <img src="pulsemed-pulseM-v3.svg" alt="Dark">
+    </div>
+    <div class="showcase-card light-bg">
+      <img src="pulsemed-pulseM-v5.svg" alt="Light">
+    </div>
+  </div>
+</body>
+</html>

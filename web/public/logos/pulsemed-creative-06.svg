@@ -1,0 +1,25 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- CREATIVE 06: Shield + Pulse = Protection -->
+  <defs>
+    <linearGradient id="rose06" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#9F1239"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield outline -->
+  <path 
+    d="M32 4 L54 12 L54 32 C54 46 32 58 32 58 C32 58 10 46 10 32 L10 12 L32 4Z"
+    stroke="url(#rose06)"
+    stroke-width="2.5"
+    fill="none"
+  />
+  <!-- Pulse inside shield -->
+  <path 
+    d="M16 32 L22 32 L25 26 L28 38 L32 18 L36 38 L39 26 L42 32 L48 32"
+    stroke="#E11D48" 
+    stroke-width="2.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

@@ -334,18 +334,21 @@ export default function Home() {
       {/* NAVIGATION */}
       <header className="sticky top-0 z-50 bg-[#FAFAF7]/80 backdrop-blur-md border-b border-[#E2E8F0]">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-2">
-            <svg viewBox="0 0 32 32" className="h-7 w-7 text-[#E11D48]">
-              <path
-                d="M4,16 L10,16 L13,8 L16,24 L19,12 L22,16 L28,16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+          <div className="flex items-center gap-1">
+            <span className="text-xl font-semibold tracking-[0.02em] text-[#E11D48]">Pulse</span>
+            <svg viewBox="0 0 64 64" className="h-7 w-auto text-[#E11D48]">
+              <path d="M4 32 L11 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M13 32 L17 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M18 24 L22 40" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M23 38 L27 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M28 16 L32 50" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+              <path d="M33 48 L37 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M38 16 L42 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M43 36 L47 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M48 24 L52 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M54 32 L60 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M28 18 L32 48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.3" transform="translate(2, -1)"/>
             </svg>
-            <span className="text-sm font-semibold tracking-[0.15em] text-[#1A1A1A] uppercase">PulseMed</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -532,18 +535,21 @@ export default function Home() {
         {/* FOOTER */}
         <footer className="border-t border-[#E2E8F0] px-6 py-10">
           <div className="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <svg viewBox="0 0 32 32" className="h-6 w-6 text-[#E11D48]">
-                <path
-                  d="M4,16 L10,16 L13,8 L16,24 L19,12 L22,16 L28,16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+            <div className="flex items-center gap-1">
+              <span className="text-lg font-semibold tracking-[0.02em] text-[#E11D48]">Pulse</span>
+              <svg viewBox="0 0 64 64" className="h-5 w-auto text-[#E11D48]">
+                <path d="M4 32 L11 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M13 32 L17 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M18 24 L22 40" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M23 38 L27 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M28 16 L32 50" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/>
+                <path d="M33 48 L37 14" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M38 16 L42 38" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M43 36 L47 22" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M48 24 L52 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M54 32 L60 32" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
+                <path d="M28 18 L32 48" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.3" transform="translate(2, -1)"/>
               </svg>
-              <span className="text-sm font-semibold tracking-[0.15em] text-[#1A1A1A] uppercase">PulseMed</span>
             </div>
             <div className="flex gap-6 text-sm text-[#64748B]">
               {["Privacy Policy", "Terms of Service", "Contact"].map((l) => (

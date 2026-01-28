@@ -1,0 +1,41 @@
+<svg viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- PulseM V6: Full "PulseMed" where the M IS the fragmented pulse -->
+  <defs>
+    <linearGradient id="roseText6" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- "Pulse" -->
+  <text x="8" y="43" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="32" 
+    font-weight="600"
+    letter-spacing="0.01em"
+    fill="url(#roseText6)">Pulse</text>
+  
+  <!-- Fragmented M replacing the M in Med -->
+  <g transform="translate(100, 0)">
+    <path d="M8 32 L12 32" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M14 32 L17 24" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M18 26 L21 38" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M22 36 L25 16" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M26 18 L29 46" stroke="#E11D48" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M30 44 L33 16" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M34 18 L37 36" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M38 34 L41 24" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M42 26 L45 32" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M47 32 L50 32" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Glitch -->
+    <path d="M26 20 L29 44" stroke="#E11D48" stroke-width="2" stroke-linecap="round" stroke-opacity="0.25" transform="translate(2, -1)"/>
+  </g>
+  
+  <!-- "ed" -->
+  <text x="152" y="43" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="32" 
+    font-weight="600"
+    letter-spacing="0.01em"
+    fill="url(#roseText6)">ed</text>
+</svg>

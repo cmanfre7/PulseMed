@@ -1,0 +1,17 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Geometric Pulse V4: Solid filled pulse with gradient effect -->
+  <defs>
+    <linearGradient id="roseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="100%" stop-color="#BE123C"/>
+    </linearGradient>
+  </defs>
+  <path 
+    d="M2 26 L10 26 L14 18 L19 34 L24 6 L29 34 L34 18 L38 26 L46 26" 
+    stroke="url(#roseGradient)" 
+    stroke-width="4" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

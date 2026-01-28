@@ -1,0 +1,33 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- CREATIVE 02: DNA Double Helix meets Pulse -->
+  <defs>
+    <linearGradient id="rose02a" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E11D48"/>
+      <stop offset="50%" stop-color="#F43F5E"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+  </defs>
+  <!-- Main pulse with DNA-like interweave -->
+  <path 
+    d="M4 32 L12 32 L16 24 L20 40 L24 20 L28 44 L32 16 L36 44 L40 20 L44 40 L48 24 L52 32 L60 32"
+    stroke="url(#rose02a)" 
+    stroke-width="2.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+  <!-- Secondary helix strand -->
+  <path 
+    d="M4 32 L12 32 L16 40 L20 24 L24 44 L28 20 L32 48 L36 20 L40 44 L44 24 L48 40 L52 32 L60 32"
+    stroke="#E11D48" 
+    stroke-width="1.5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    stroke-opacity="0.4"
+    fill="none"
+  />
+  <!-- Connection nodes -->
+  <circle cx="20" cy="32" r="2" fill="#E11D48"/>
+  <circle cx="32" cy="32" r="2.5" fill="#E11D48"/>
+  <circle cx="44" cy="32" r="2" fill="#E11D48"/>
+</svg>
