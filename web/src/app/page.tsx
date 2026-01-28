@@ -19,7 +19,7 @@ function RadiatingPulse() {
 
   return (
     <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none" style={{ opacity: 0.15 }}>
-      <div className="absolute top-1/2 right-[38%] -translate-y-1/2">
+      <div className="absolute top-1/2 right-[52%] -translate-y-1/2">
         {/* Outer radiating rings */}
         {[1, 2, 3, 4, 5].map((ring) => (
           <div
