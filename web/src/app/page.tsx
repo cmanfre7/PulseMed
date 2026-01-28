@@ -20,22 +20,26 @@ function RadiatingPulse() {
   return (
     <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none" style={{ opacity: 0.15 }}>
       <div className="absolute top-1/2 right-[52%] -translate-y-1/2">
-        {/* Outer radiating rings */}
-        {[1, 2, 3, 4, 5].map((ring) => (
-          <div
-            key={ring}
-            className="absolute rounded-full border border-[#0D9488]"
-            style={{
-              width: `${200 + ring * 120}px`,
-              height: `${200 + ring * 120}px`,
-              top: `${-(100 + ring * 60)}px`,
-              left: `${-(100 + ring * 60)}px`,
-              animation: `pulse-ring-expand 4s ease-out infinite`,
-              animationDelay: `${ring * 0.5}s`,
-              opacity: 1 - ring * 0.15,
-            }}
-          />
-        ))}
+        {/* Outer radiating rings - perfectly centered */}
+        {[1, 2, 3, 4, 5].map((ring) => {
+          const size = 200 + ring * 120;
+          const offset = (size - 200) / 2;
+          return (
+            <div
+              key={ring}
+              className="absolute rounded-full border border-[#0D9488]"
+              style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                top: `${-offset}px`,
+                left: `${-offset}px`,
+                animation: `pulse-ring-expand 4s ease-out infinite`,
+                animationDelay: `${ring * 0.5}s`,
+                opacity: 1 - ring * 0.15,
+              }}
+            />
+          );
+        })}
         
         {/* Central glowing orb */}
         <div 
