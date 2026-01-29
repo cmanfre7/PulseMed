@@ -1,0 +1,53 @@
+<svg viewBox="0 0 340 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Opacity Mask for the fade-in underline -->
+    <!-- Starts transparent on left, becomes opaque near the M -->
+    <linearGradient id="fadeMask" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="white" stop-opacity="0"/>
+      <stop offset="0.8" stop-color="white" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Typography: "Pulse" -->
+  <!-- Dark Charcoal (#1E293B) -->
+  <!-- Inter/Helvetica style, tight tracking -->
+  <text x="10" y="68" 
+    font-family="'Inter', 'Helvetica Neue', Arial, sans-serif" 
+    font-size="64" 
+    font-weight="700"
+    letter-spacing="-0.04em"
+    fill="#1E293B">Pulse</text>
+
+  <!-- EKG Line Construction -->
+  <!-- Muted Medical Green (#059669) -->
+  
+  <!-- Part 1: The Fading Underline -->
+  <!-- Goes from x=10 (under P) to x=175 (start of M) -->
+  <path 
+    d="M10 82 L175 82" 
+    stroke="#059669" 
+    stroke-width="3" 
+    stroke-linecap="round"
+    stroke-opacity="1"
+    mask="url(#fadeMask)"
+  />
+
+  <!-- Part 2: The M Shape (Solid, Opaque) -->
+  <!-- Starts at 175, 82 -->
+  <!-- Peak 1: Up to 195, 20 -->
+  <!-- Valley: Down to 215, 82 -->
+  <!-- Peak 2: Up to 235, 20 -->
+  <!-- End: Down to 255, 82 -->
+  <path 
+    d="M175 82 
+       L195 20 
+       L215 82 
+       L235 20 
+       L255 82" 
+    stroke="#059669" 
+    stroke-width="5" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>

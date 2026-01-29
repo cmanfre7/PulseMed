@@ -59,7 +59,7 @@ export default function Technology() {
       <header className="sticky top-0 z-50 bg-[#FAFAF7]/80 backdrop-blur-md border-b border-[#E2E8F0]">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-1">
-            <img src="/logos/Logo.svg" alt="PulseMed" className="h-10 w-auto" />
+            <img src="/logos/Logo.svg" alt="PulseMed" className="h-14 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">

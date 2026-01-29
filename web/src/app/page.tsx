@@ -406,7 +406,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm">
         <div className="mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-1">
-            <img src="/logos/Logo.svg" alt="PulseMed" className="h-10 w-auto" />
+            <img src="/logos/Logo.svg" alt="PulseMed" className="h-14 w-auto" />
           </div>
 
           <nav className="hidden md:flex items-center gap-8">
