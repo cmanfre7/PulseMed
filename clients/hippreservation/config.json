@@ -1,7 +1,7 @@
 {
   "clientId": "hippreservation",
   "clientName": "Hip Preservation Orthopedic Surgery",
-  "displayName": "HipGuide",
+  "displayName": "Hip Preservation Navigator",
   "specialty": "orthopedics",
   "platform": "wix",
   
@@ -12,8 +12,8 @@
     "backgroundColor": "#ffffff",
     "fontFamily": "Inter, system-ui, sans-serif",
     "logo": null,
-    "chatbotName": "HipGuide",
-    "welcomeMessage": "Hi! I'm HipGuide, your recovery companion. I'm here to help with questions about your hip surgery journey. How can I support you today?"
+    "chatbotName": "Hip Preservation Navigator",
+    "welcomeMessage": "Hi! I'm your Hip Preservation Navigator, your recovery companion. I'm here to help with questions about your hip surgery journey. How can I support you today?"
   },
   
   "features": {

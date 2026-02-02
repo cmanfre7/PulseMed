@@ -9,6 +9,7 @@
     "build": "echo 'Server app - no build needed'",
     "kb:build": "echo 'KB build skipped - no scripts yet'",
     "kb:ingest": "node scripts/ingest-pdfs.js",
+    "kb:build": "node scripts/ingest-pdfs.js",
     "preview": "vite preview",
     "start": "node server.js"
   },

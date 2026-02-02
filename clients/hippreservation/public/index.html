@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hip Preservation Navigator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; min-height: 100vh; }
+
+    /* Widget Container */
+    #hipguide-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Chat Bubble */
+    .chat-bubble {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(74, 28, 124, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .chat-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(74, 28, 124, 0.5); }
+    .chat-bubble:active { transform: scale(0.95); }
+    .chat-bubble svg { width: 28px; height: 28px; fill: white; }
+    .chat-bubble::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(74, 28, 124, 0.3);
+      animation: pulse 2s ease-out infinite;
+    }
+    .chat-bubble.open::before { animation: none; opacity: 0; }
+    @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.6); opacity: 0; } }
+
+    /* Chat Window */
+    .chat-window {
+      position: absolute;
+      bottom: 76px;
+      right: 0;
+      width: 400px;
+      height: 580px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+    /* Header */
+    .chat-header {
+      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      color: white;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .chat-header-left { display: flex; align-items: center; gap: 10px; }
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chat-title h3 { font-size: 15px; font-weight: 600; margin: 0; }
+    .chat-title span { font-size: 11px; opacity: 0.85; }
+    .close-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .close-btn:hover { background: rgba(255, 255, 255, 0.25); }
+    .close-btn svg { width: 16px; height: 16px; fill: white; }
+
+    /* Tab Bar */
+    .tab-bar {
+      display: flex;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e5e7eb;
+      flex-shrink: 0;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px 8px;
+      background: none;
+      border: none;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #4a1c7c; background: #f3f4f6; }
+    .tab-btn.active { color: #4a1c7c; border-bottom-color: #4a1c7c; background: white; }
+
+    /* Tab Content */
+    .tab-content { flex: 1; overflow: hidden; display: none; flex-direction: column; }
+    .tab-content.active { display: flex; }
+
+    /* Chat Tab */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: #f8f9fa;
+    }
+    .chat-messages::-webkit-scrollbar { width: 6px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      animation: messageSlide 0.3s ease;
+    }
+    @keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .message.bot { background: white; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .message.user { background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .message.typing { display: flex; gap: 4px; padding: 16px 20px; }
+    .message.typing span { width: 8px; height: 8px; background: #9ca3af; border-radius: 50%; animation: typingDot 1.4s infinite; }
+    .message.typing span:nth-child(2) { animation-delay: 0.2s; }
+    .message.typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingDot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+
+    .welcome-badge {
+      display: inline-flex;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      color: #4a1c7c;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    .chat-input-area {
+      padding: 12px 16px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      max-height: 80px;
+      line-height: 1.4;
+    }
+    .chat-input:focus { outline: none; border-color: #6b2c9e; box-shadow: 0 0 0 3px rgba(107, 44, 158, 0.15); }
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .send-btn:hover { transform: scale(1.05); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .send-btn svg { width: 18px; height: 18px; fill: white; margin-left: 2px; }
+
+    /* Content Lists (Blogs, Videos, Resources) */
+    .content-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      background: #f8f9fa;
+    }
+    .content-item {
+      background: white;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+      transition: all 0.2s;
+    }
+    .content-item:hover { border-color: #6b2c9e; box-shadow: 0 2px 8px rgba(74, 28, 124, 0.1); }
+    .content-item h4 { font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 4px; }
+    .content-item p { font-size: 12px; color: #6b7280; line-height: 1.4; }
+    .content-item .meta { font-size: 11px; color: #9ca3af; margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+    .content-item .tag {
+      background: #f3e8ff;
+      color: #6b2c9e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    /* Modal Overlay - Full screen for videos */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-content {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      max-height: 85vh;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalSlide 0.3s ease;
+    }
+    .modal-content.video-modal {
+      max-width: 1200px;
+      width: 90vw;
+      max-height: 90vh;
+    }
+    @keyframes modalSlide { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    .modal-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .modal-header h3 { font-size: 15px; font-weight: 600; color: #1f2937; }
+    .modal-close {
+      background: #f3f4f6;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover { background: #e5e7eb; }
+    .modal-close svg { width: 14px; height: 14px; fill: #6b7280; }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+    .modal-body h1, .modal-body h2, .modal-body h3 { color: #1f2937; margin: 16px 0 8px; }
+    .modal-body h1 { font-size: 20px; }
+    .modal-body h2 { font-size: 17px; }
+    .modal-body h3 { font-size: 15px; }
+    .modal-body p { font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 12px; }
+    .modal-body ul, .modal-body ol { margin: 12px 0; padding-left: 24px; }
+    .modal-body li { font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 6px; }
+
+    .video-embed {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 8px;
+      background: #000;
+      min-height: 500px;
+    }
+
+    /* Disclaimer */
+    .chat-disclaimer {
+      padding: 8px 16px;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      font-size: 10px;
+      color: #6b7280;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      #hipguide-widget { bottom: 16px; right: 16px; }
+      .chat-window { width: calc(100vw - 32px); height: calc(100vh - 100px); }
+      .chat-bubble { width: 56px; height: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="hipguide-widget">
+    <div class="chat-window" id="chatWindow">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="chat-header-left">
+          <div class="chat-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/></svg></div>
+          <div class="chat-title">
+            <h3>Hip Preservation Navigator</h3>
+            <span>Recovery Companion</span>
+          </div>
+        </div>
+        <button class="close-btn" id="closeChat"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+
+      <!-- Tab Bar -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="chat">Chat</button>
+        <button class="tab-btn" data-tab="docs">Documents</button>
+        <button class="tab-btn" data-tab="videos">Videos</button>
+        <button class="tab-btn" data-tab="resources">Resources</button>
+      </div>
+
+      <!-- Chat Tab -->
+      <div class="tab-content active" id="tab-chat">
+        <div class="chat-messages" id="chatMessages">
+          <div class="message bot">
+            <div class="welcome-badge">Recovery Companion</div>
+            <div>Hi! I'm your Hip Preservation Navigator. I'm here to help with questions about your hip surgery journey. How can I support you today?</div>
+          </div>
+        </div>
+        <div class="chat-disclaimer">Educational information only. Always follow your surgeon's instructions.</div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chatInput" placeholder="Type your question..." rows="1"></textarea>
+          <button class="send-btn" id="sendBtn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+        </div>
+      </div>
+
+      <!-- Documents Tab -->
+      <div class="tab-content" id="tab-docs">
+        <div class="content-list" id="docsList"></div>
+      </div>
+
+      <!-- Videos Tab -->
+      <div class="tab-content" id="tab-videos">
+        <div class="content-list" id="videosList"></div>
+      </div>
+
+      <!-- Resources Tab -->
+      <div class="tab-content" id="tab-resources">
+        <div class="content-list" id="resourcesList"></div>
+      </div>
+
+    </div>
+
+    <button class="chat-bubble" id="chatBubble"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></button>
+  </div>
+
+  <!-- Modal - Outside widget for full screen -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Title</h3>
+        <button class="modal-close" id="modalClose"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Content Data
+      const docs = [
+        { id: 'pre-post-op-instructions', title: 'Pre and Post Operative Instructions', desc: 'Complete guide for before and after your surgery.', tag: 'Hip Arthroscopy', file: 'pre-post-op-instructions.pdf' },
+        { id: 'surgery-checklist', title: 'Hip Arthroscopy Surgery Checklist', desc: 'Everything you need to prepare for surgery day.', tag: 'Hip Arthroscopy', file: 'surgery-checklist.pdf' },
+        { id: 'return-to-sport', title: 'Return-To-Sport Timeline', desc: 'When and how to safely return to athletic activities.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline.pdf' },
+        { id: 'everyday-life', title: 'Everyday Life After Hip Arthroscopy', desc: 'Navigating daily activities during recovery.', tag: 'Hip Arthroscopy', file: 'everyday-life-after-arthroscopy.pdf' },
+        { id: 'hip-dysplasia-ebook', title: 'Hip Dysplasia eBook', desc: 'Comprehensive guide to understanding dysplasia, diagnosis, and surgical options.', tag: 'Hip Dysplasia', file: 'hip-dysplasia-ebook.pdf' },
+        { id: 'pao-pre-post-op', title: 'PAO Pre and Post Operative Instructions', desc: 'Specific guidelines for PAO surgery patients.', tag: 'PAO', file: 'pao-pre-post-op.pdf' },
+        { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for periacetabular osteotomy.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
+        { id: 'combined-surgery-guide', title: 'Combined PAO & Arthroscopy Guide', desc: 'Information for patients undergoing both procedures.', tag: 'Combined', file: 'combined-surgery-guide.pdf' },
+      ];
+
+      const videos = [
+        { id: 'dr-casp', title: 'Meet Dr. Aaron Casp', desc: 'Hip preservation specialist introduction.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'dr-genuario', title: 'Dr. James Genuario', desc: 'Orthopedic surgeon at UCHealth.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'labral-tears-fai', title: 'Labral Tears and FAI', desc: 'Dr. Ellman explains diagnosis and treatment.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'michaela-story', title: "Michaela's Story", desc: 'College volleyball player with bilateral hip repairs.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'bursitis', title: 'Understanding Bursitis', desc: 'What it is and how to get better.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'labral-repair-vs-replacement', title: 'Labral Repair vs Replacement', desc: 'Making the right choice for your hip.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'how-to-sit-after-surgery', title: 'Sitting After Hip Surgery', desc: 'Proper technique for post-op patients.', youtube: 'dQw4w9WgXcQ' },
+        { id: 'hip-dysplasia-causes', title: 'Hip Dysplasia Explained', desc: 'Causes and treatment options.', youtube: 'dQw4w9WgXcQ' },
+      ];
+
+      const resources = [
+        { id: 'dysplasia', title: 'Hip Dysplasia', desc: 'Comprehensive guide to hip dysplasia.', tag: 'Condition' },
+        { id: 'fai', title: 'Femoroacetabular Impingement', desc: 'Understanding FAI causes and treatments.', tag: 'Condition' },
+        { id: 'labral-tears', title: 'Labral Tears', desc: 'The hip labrum and tear management.', tag: 'Condition' },
+        { id: 'pao', title: 'PAO Surgery', desc: 'Periacetabular Osteotomy explained.', tag: 'Procedure' },
+        { id: 'hip-arthroscopy', title: 'Hip Arthroscopy', desc: 'Minimally invasive hip surgery.', tag: 'Procedure' },
+        { id: 'combined-surgery', title: 'Combined PAO & Arthroscopy', desc: 'Single-surgery approach for complex cases.', tag: 'Procedure' },
+        { id: 'faq', title: 'Frequently Asked Questions', desc: 'Common questions about hip preservation.', tag: 'General' },
+        { id: 'surgical-candidate', title: 'Am I a Surgical Candidate?', desc: 'Find out if surgery is right for you.', tag: 'General' },
+      ];
+
+      // Elements
+      const bubble = document.getElementById('chatBubble');
+      const chatWindow = document.getElementById('chatWindow');
+      const closeBtn = document.getElementById('closeChat');
+      const input = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const messagesContainer = document.getElementById('chatMessages');
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      const modalClose = document.getElementById('modalClose');
+
+      let isOpen = false;
+      let isLoading = false;
+      let conversationHistory = [];
+
+      // Toggle widget
+      function toggleChat() {
+        isOpen = !isOpen;
+        chatWindow.classList.toggle('open', isOpen);
+        bubble.classList.toggle('open', isOpen);
+        if (isOpen) setTimeout(() => input.focus(), 300);
+      }
+      bubble.addEventListener('click', toggleChat);
+      closeBtn.addEventListener('click', toggleChat);
+
+      // Tab switching
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+      });
+
+      // Render content lists
+      function renderList(container, items, type) {
+        container.innerHTML = items.map(item => `
+          <div class="content-item" data-type="${type}" data-id="${item.id}" ${item.youtube ? `data-youtube="${item.youtube}"` : ''} ${item.file ? `data-file="${item.file}"` : ''}>
+            <h4>${item.title}</h4>
+            <p>${item.desc}</p>
+            <div class="meta">
+              ${item.tag ? `<span class="tag">${item.tag}</span>` : ''}
+              ${type === 'video' ? '<span>Video</span>' : type === 'doc' ? '<span>PDF Document</span>' : '<span>Read more</span>'}
+            </div>
+          </div>
+        `).join('');
+      }
+      renderList(document.getElementById('docsList'), docs, 'doc');
+      renderList(document.getElementById('videosList'), videos, 'video');
+      renderList(document.getElementById('resourcesList'), resources, 'resource');
+
+      // Content item click - open modal
+      document.querySelectorAll('.content-item').forEach(item => {
+        item.addEventListener('click', async () => {
+          const type = item.dataset.type;
+          const id = item.dataset.id;
+          const title = item.querySelector('h4').textContent;
+          
+          modalTitle.textContent = title;
+          
+          if (type === 'video') {
+            const ytId = item.dataset.youtube;
+            document.querySelector('.modal-content').classList.add('video-modal');
+            modalBody.innerHTML = `<iframe class="video-embed" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+          } else if (type === 'doc') {
+            const file = item.dataset.file;
+            document.querySelector('.modal-content').classList.add('video-modal');
+            modalBody.innerHTML = `
+              <div style="display:flex;flex-direction:column;height:100%;">
+                <div style="padding:12px 0;display:flex;justify-content:flex-end;">
+                  <a href="/pdfs/${file}" download class="download-btn" style="background:linear-gradient(135deg,#4a1c7c,#6b2c9e);color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;">Download PDF</a>
+                </div>
+                <iframe src="/pdfs/${file}" style="flex:1;width:100%;border:none;border-radius:8px;min-height:500px;"></iframe>
+              </div>
+            `;
+          } else {
+            document.querySelector('.modal-content').classList.remove('video-modal');
+            modalBody.innerHTML = '<p style="text-align:center;color:#9ca3af;">Loading...</p>';
+            try {
+              const resp = await fetch(`/api/content/${type}/${id}`);
+              if (resp.ok) {
+                const data = await resp.json();
+                modalBody.innerHTML = data.html || '<p>Content not available.</p>';
+              } else {
+                modalBody.innerHTML = '<p>Unable to load content. Please try again.</p>';
+              }
+            } catch (e) {
+              modalBody.innerHTML = '<p>Unable to load content. Please try again.</p>';
+            }
+          }
+          modalOverlay.classList.add('open');
+        });
+      });
+
+      // Close modal
+      function closeModal() {
+        modalOverlay.classList.remove('open');
+        document.querySelector('.modal-content').classList.remove('video-modal');
+        // Stop video playback
+        const iframe = modalBody.querySelector('iframe');
+        if (iframe) iframe.src = '';
+      }
+      modalClose.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      // Chat functionality
+      input.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+      });
+
+      async function sendMessage() {
+        const text = input.value.trim();
+        if (!text || isLoading) return;
+
+        addMessage(text, 'user');
+        conversationHistory.push({ role: 'user', content: text });
+        input.value = '';
+        input.style.height = 'auto';
+        isLoading = true;
+        sendBtn.disabled = true;
+
+        const typingEl = addTypingIndicator();
+
+        try {
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text, history: conversationHistory.slice(-10) })
+          });
+          const data = await response.json();
+          typingEl.remove();
+          const botMessage = data.answer || data.response || 'I had trouble processing that. Could you try rephrasing?';
+          addMessage(botMessage, 'bot');
+          conversationHistory.push({ role: 'assistant', content: botMessage });
+        } catch (error) {
+          typingEl.remove();
+          addMessage('Having trouble connecting. Please try again.', 'bot');
+        }
+
+        isLoading = false;
+        sendBtn.disabled = false;
+        input.focus();
+      }
+
+      function addMessage(text, type) {
+        const msg = document.createElement('div');
+        msg.className = `message ${type}`;
+        msg.textContent = text;
+        messagesContainer.appendChild(msg);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function addTypingIndicator() {
+        const typing = document.createElement('div');
+        typing.className = 'message bot typing';
+        typing.innerHTML = '<span></span><span></span><span></span>';
+        messagesContainer.appendChild(typing);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        return typing;
+      }
+
+      sendBtn.addEventListener('click', sendMessage);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (modalOverlay.classList.contains('open')) closeModal();
+          else if (isOpen) toggleChat();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

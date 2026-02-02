@@ -383,5 +383,320 @@ npm run build:all
 
 ---
 
-**Last Updated**: January 2025  
+## 📄 Knowledge Base & PDF Extraction System
+
+PulseMed uses a **physician-approved knowledge base** system. The AI ONLY responds using content from the curated knowledge base, ensuring all information is vetted and accurate.
+
+### Knowledge Base Structure
+
+```
+clients/{client-name}/
+├── knowledge-base/
+│   ├── index.json              # Master index of all KB documents
+│   ├── conditions/             # Disease/condition pages
+│   │   ├── dysplasia.md
+│   │   └── fai.md
+│   ├── procedures/             # Surgical procedure pages
+│   │   ├── pao.md
+│   │   └── hip-arthroscopy.md
+│   ├── blog/                   # Blog posts and articles
+│   ├── providers/              # Provider profiles
+│   └── pdfs/                   # Extracted PDF content (auto-generated)
+│       ├── pre-op-instructions.md
+│       └── surgery-checklist.md
+│
+├── public/pdfs/                # Original PDF files (served to users)
+│   ├── pre-op-instructions.pdf
+│   └── surgery-checklist.pdf
+│
+└── scripts/
+    └── ingest-pdfs.js          # PDF extraction script
+```
+
+### index.json Format
+
+```json
+{
+  "documents": [
+    {
+      "path": "conditions/dysplasia.md",
+      "title": "Hip Dysplasia",
+      "category": "conditions",
+      "url": "https://example.com/dysplasia",
+      "tags": ["dysplasia", "hip", "congenital"]
+    }
+  ],
+  "crawledAt": "2026-02-02T00:00:00Z",
+  "totalDocs": 29
+}
+```
+
+### Markdown Document Format
+
+Each KB document uses frontmatter + markdown:
+
+```markdown
+---
+title: Hip Dysplasia
+url: https://hippreservation.org/dysplasia
+category: conditions
+tags: [dysplasia, hip, developmental]
+---
+
+## Overview
+
+Hip dysplasia is a condition where the hip socket...
+
+## Symptoms
+
+- Hip pain
+- Limited range of motion
+...
+```
+
+### PDF Extraction Pipeline
+
+PDFs are processed in 3 stages:
+
+#### 1. Text Extraction
+
+Using `pdf-parse` to extract raw text from PDFs:
+
+```javascript
+import pdfParse from 'pdf-parse';
+import fs from 'fs';
+
+const buffer = fs.readFileSync('document.pdf');
+const data = await pdfParse(buffer);
+console.log(data.text); // Extracted text
+```
+
+#### 2. Chunking
+
+Large documents are split into chunks (~500 characters) for better retrieval:
+
+```javascript
+function chunkText(text, maxChunkSize = 500) {
+  const chunks = [];
+  const paragraphs = text.split(/\n\n+/);
+  let currentChunk = '';
+  
+  for (const para of paragraphs) {
+    if ((currentChunk + para).length > maxChunkSize && currentChunk) {
+      chunks.push({
+        text: currentChunk.trim(),
+        type: detectChunkType(currentChunk)
+      });
+      currentChunk = para;
+    } else {
+      currentChunk += (currentChunk ? '\n\n' : '') + para;
+    }
+  }
+  if (currentChunk) chunks.push({ text: currentChunk.trim() });
+  return chunks;
+}
+```
+
+#### 3. Categorization
+
+Chunks are tagged by type for prioritized retrieval:
+
+- `emergency` - Red flags, urgent warnings
+- `protocol` - Step-by-step clinical protocols
+- `timeline` - Day-by-day or week-by-week guides
+- `advice` - Tips and recommendations
+- `faq` - Question/answer format
+- `general` - Everything else
+
+### PDF Ingestion Script Template
+
+Create `scripts/ingest-pdfs.js` in your client folder:
+
+```javascript
+#!/usr/bin/env node
+import fs from 'fs';
+import path from 'path';
+import pdfParse from 'pdf-parse';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PDF_DIR = path.join(__dirname, '..', 'public', 'pdfs');
+const KB_DIR = path.join(__dirname, '..', 'knowledge-base', 'pdfs');
+
+async function extractPDF(filePath) {
+  const buffer = fs.readFileSync(filePath);
+  const data = await pdfParse(buffer);
+  return {
+    text: data.text,
+    pages: data.numpages,
+    info: data.info
+  };
+}
+
+function chunkText(text, maxSize = 500) {
+  const chunks = [];
+  const paragraphs = text.split(/\n\n+/);
+  let current = '';
+  
+  for (const para of paragraphs) {
+    if ((current + para).length > maxSize && current) {
+      chunks.push(current.trim());
+      current = para;
+    } else {
+      current += (current ? '\n\n' : '') + para;
+    }
+  }
+  if (current) chunks.push(current.trim());
+  return chunks;
+}
+
+async function ingestPDFs() {
+  const files = fs.readdirSync(PDF_DIR).filter(f => f.endsWith('.pdf'));
+  const kbEntries = [];
+  
+  fs.mkdirSync(KB_DIR, { recursive: true });
+  
+  for (const file of files) {
+    console.log(`Processing: ${file}`);
+    const filePath = path.join(PDF_DIR, file);
+    const extracted = await extractPDF(filePath);
+    const chunks = chunkText(extracted.text);
+    
+    // Create markdown file
+    const mdContent = `---
+title: ${file.replace('.pdf', '').replace(/-/g, ' ')}
+source: ${file}
+category: pdf
+pages: ${extracted.pages}
+---
+
+${extracted.text}
+`;
+    
+    const mdPath = path.join(KB_DIR, file.replace('.pdf', '.md'));
+    fs.writeFileSync(mdPath, mdContent);
+    
+    kbEntries.push({
+      path: `pdfs/${file.replace('.pdf', '.md')}`,
+      title: file.replace('.pdf', '').replace(/-/g, ' '),
+      category: 'pdf',
+      source: file,
+      chunks: chunks.length
+    });
+    
+    console.log(`  ✓ Extracted ${extracted.text.length} chars, ${chunks.length} chunks`);
+  }
+  
+  // Update index.json
+  const indexPath = path.join(__dirname, '..', 'knowledge-base', 'index.json');
+  let index = { documents: [] };
+  if (fs.existsSync(indexPath)) {
+    index = JSON.parse(fs.readFileSync(indexPath, 'utf-8'));
+  }
+  
+  // Add PDF entries (avoid duplicates)
+  const existingPaths = new Set(index.documents.map(d => d.path));
+  for (const entry of kbEntries) {
+    if (!existingPaths.has(entry.path)) {
+      index.documents.push(entry);
+    }
+  }
+  
+  index.totalDocs = index.documents.length;
+  index.pdfIngestedAt = new Date().toISOString();
+  
+  fs.writeFileSync(indexPath, JSON.stringify(index, null, 2));
+  console.log(`\n✅ Ingested ${kbEntries.length} PDFs into knowledge base`);
+}
+
+ingestPDFs().catch(console.error);
+```
+
+### Running PDF Ingestion
+
+```bash
+# From client directory
+cd clients/hippreservation
+
+# Add PDFs to public/pdfs/
+cp /path/to/your/pdfs/*.pdf public/pdfs/
+
+# Run ingestion
+npm run kb:ingest
+# Or: node scripts/ingest-pdfs.js
+```
+
+### Knowledge Base Search (Server-Side)
+
+The server loads all KB documents at startup and performs keyword search:
+
+```javascript
+// server.js - KB search implementation
+function searchKnowledgeBase(query, limit = 4) {
+  const terms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+  
+  const scored = kbDocuments.map(doc => {
+    let score = 0;
+    for (const term of terms) {
+      if (doc.searchText.includes(term)) {
+        score += 1;
+        if (doc.title.toLowerCase().includes(term)) score += 3;
+      }
+    }
+    // Category boosts
+    if (terms.some(t => ['emergency', 'urgent', 'warning'].includes(t)) 
+        && doc.category === 'emergency') score += 5;
+    return { ...doc, score };
+  });
+  
+  return scored
+    .filter(d => d.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+```
+
+### AI Response Prioritization
+
+When generating responses, the AI is instructed to:
+
+1. **Prioritize KB content** - Use physician-approved documents first
+2. **Cite sources** - Reference which document the information came from
+3. **Acknowledge limits** - If KB doesn't cover a topic, say so
+4. **Never invent** - Don't add information not in the KB
+
+System prompt additions:
+
+```javascript
+const systemPrompt = `
+You are ${chatbotName} for ${clientName}.
+
+KNOWLEDGE BASE PRIORITY:
+1. ONLY use information from the provided knowledge base context
+2. If the question isn't covered in the KB, acknowledge this limitation
+3. Never invent medical information - only use what's in the KB
+4. Cite which document your information comes from
+
+[Knowledge Base Context will be injected here]
+`;
+```
+
+### Adding New Content to KB
+
+1. **Web content**: Add `.md` files to appropriate folder (conditions/, procedures/, etc.)
+2. **PDFs**: Add to `public/pdfs/`, run `npm run kb:ingest`
+3. **Update index.json**: Add entry for new document
+4. **Restart server**: KB is loaded at startup
+
+### Best Practices
+
+- **Chunk size**: 500-800 characters optimal for retrieval
+- **Tagging**: Use consistent tags across documents
+- **Emergency content**: Always tag red flags and urgent warnings
+- **Updates**: Re-ingest PDFs when they change
+- **Testing**: Query the KB directly to verify retrieval works
+
+---
+
+**Last Updated**: February 2026  
 **Maintained by**: PulseMed Development Team
