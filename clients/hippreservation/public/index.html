@@ -407,15 +407,16 @@
   <script>
     (function() {
       // Content Data
+      // Featured/Quick Access Documents (subset of most important PDFs)
       const docs = [
-        { id: 'pre-post-op-instructions', title: 'Pre and Post Operative Instructions', desc: 'Complete guide for before and after your surgery.', tag: 'Hip Arthroscopy', file: 'pre-post-op-instructions.pdf' },
-        { id: 'surgery-checklist', title: 'Hip Arthroscopy Surgery Checklist', desc: 'Everything you need to prepare for surgery day.', tag: 'Hip Arthroscopy', file: 'surgery-checklist.pdf' },
-        { id: 'return-to-sport', title: 'Return-To-Sport Timeline', desc: 'When and how to safely return to athletic activities.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline.pdf' },
-        { id: 'everyday-life', title: 'Everyday Life After Hip Arthroscopy', desc: 'Navigating daily activities during recovery.', tag: 'Hip Arthroscopy', file: 'everyday-life-after-arthroscopy.pdf' },
-        { id: 'hip-dysplasia-ebook', title: 'Hip Dysplasia eBook', desc: 'Comprehensive guide to understanding dysplasia, diagnosis, and surgical options.', tag: 'Hip Dysplasia', file: 'hip-dysplasia-ebook.pdf' },
-        { id: 'pao-pre-post-op', title: 'PAO Pre and Post Operative Instructions', desc: 'Specific guidelines for PAO surgery patients.', tag: 'PAO', file: 'pao-pre-post-op.pdf' },
-        { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for periacetabular osteotomy.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
-        { id: 'combined-surgery-guide', title: 'Combined PAO & Arthroscopy Guide', desc: 'Information for patients undergoing both procedures.', tag: 'Combined', file: 'combined-surgery-guide.pdf' },
+        { id: 'pao-overview', title: 'Overview of PAO Surgery', desc: 'Complete guide to periacetabular osteotomy.', tag: 'PAO', file: 'overview-of-periacetabular-osteotomy-pao-and-what-to-expect.pdf' },
+        { id: 'arthroscopy-prepost', title: 'Hip Arthroscopy Pre & Post-Op', desc: 'Instructions for before and after surgery.', tag: 'Hip Arthroscopy', file: 'hip-arthroscopy-pre-and-post-operative-instructions.pdf' },
+        { id: 'dysplasia-understand', title: 'Understanding Hip Dysplasia', desc: 'What you need to know about hip dysplasia.', tag: 'Hip Dysplasia', file: 'understanding-hip-dysplasia-what-you-need-to-know.pdf' },
+        { id: 'combined-preop', title: 'Combined Surgery Pre-Op', desc: 'Preparing for combined hip preservation surgery.', tag: 'Combined', file: 'combined-hip-preservation-surgery-pre-operative.pdf' },
+        { id: 'rehab-exercises', title: 'Hip Preservation PT Exercises', desc: 'Exercise guide for hip preservation patients.', tag: 'Therapy & Rehab', file: 'hip-preservation-physical-therapy-exercises.pdf' },
+        { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for PAO patients.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
+        { id: 'arthroscopy-return-sport', title: 'Return-to-Sport Timeline', desc: 'When and how to safely return to athletics.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline-after-hip-arthroscopy.pdf' },
+        { id: 'rehab-pao', title: 'PAO Rehabilitation Protocol', desc: 'Physical therapy protocol for PAO patients.', tag: 'Therapy & Rehab', file: 'pao-rehab.pdf' },
       ];
 
       const videos = [
@@ -430,14 +431,32 @@
       ];
 
       const resources = [
-        { id: 'dysplasia', title: 'Hip Dysplasia', desc: 'Comprehensive guide to hip dysplasia.', tag: 'Condition' },
-        { id: 'fai', title: 'Femoroacetabular Impingement', desc: 'Understanding FAI causes and treatments.', tag: 'Condition' },
-        { id: 'labral-tears', title: 'Labral Tears', desc: 'The hip labrum and tear management.', tag: 'Condition' },
-        { id: 'pao', title: 'PAO Surgery', desc: 'Periacetabular Osteotomy explained.', tag: 'Procedure' },
-        { id: 'hip-arthroscopy', title: 'Hip Arthroscopy', desc: 'Minimally invasive hip surgery.', tag: 'Procedure' },
-        { id: 'combined-surgery', title: 'Combined PAO & Arthroscopy', desc: 'Single-surgery approach for complex cases.', tag: 'Procedure' },
-        { id: 'faq', title: 'Frequently Asked Questions', desc: 'Common questions about hip preservation.', tag: 'General' },
-        { id: 'surgical-candidate', title: 'Am I a Surgical Candidate?', desc: 'Find out if surgery is right for you.', tag: 'General' },
+        // PAO Resources
+        { id: 'pao-overview', title: 'Overview of PAO and What to Expect', desc: 'Complete guide to periacetabular osteotomy surgery.', tag: 'PAO', file: 'overview-of-periacetabular-osteotomy-pao-and-what-to-expect.pdf' },
+        { id: 'pao-prep', title: 'Preparing for PAO Surgery', desc: 'How to prepare for your PAO procedure.', tag: 'PAO', file: 'preparing-for-pao-surgery.pdf' },
+        { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for PAO patients.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
+        { id: 'pao-risks', title: 'PAO Surgery: Risks and Recovery', desc: 'Understanding risks, complications, and recovery process.', tag: 'PAO', file: 'pao-surgery-risks-complications-and-recovery-process.pdf' },
+        { id: 'pao-life-after', title: 'Life After PAO', desc: 'Recovery, physical therapy, and FAQs.', tag: 'PAO', file: 'life-after-pao-recovery-physical-therapy-and-faqs.pdf' },
+        // Hip Arthroscopy Resources
+        { id: 'arthroscopy-prepost', title: 'Hip Arthroscopy Pre & Post-Op', desc: 'Instructions for before and after surgery.', tag: 'Hip Arthroscopy', file: 'hip-arthroscopy-pre-and-post-operative-instructions.pdf' },
+        { id: 'arthroscopy-checklist', title: 'Surgery Checklist', desc: 'Everything you need for surgery day.', tag: 'Hip Arthroscopy', file: 'surgery-checklist.pdf' },
+        { id: 'arthroscopy-return-sport', title: 'Return-to-Sport Timeline', desc: 'When and how to safely return to athletics.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline-after-hip-arthroscopy.pdf' },
+        { id: 'arthroscopy-everyday', title: 'Everyday Life After Arthroscopy', desc: 'Navigating daily activities during recovery.', tag: 'Hip Arthroscopy', file: 'everyday-life-after-hip-arthroscopy.pdf' },
+        // Hip Dysplasia Resources
+        { id: 'dysplasia-understand', title: 'Understanding Hip Dysplasia', desc: 'What you need to know about hip dysplasia.', tag: 'Hip Dysplasia', file: 'understanding-hip-dysplasia-what-you-need-to-know.pdf' },
+        { id: 'dysplasia-causes', title: 'What Causes Hip Dysplasia?', desc: 'Learn about the causes and risk factors.', tag: 'Hip Dysplasia', file: 'what-causes-hip-dysplasia.pdf' },
+        { id: 'dysplasia-diagnosis', title: 'Diagnosis of Hip Dysplasia', desc: 'How hip dysplasia is diagnosed.', tag: 'Hip Dysplasia', file: 'diagnosis-of-hip-dysplasia.pdf' },
+        { id: 'dysplasia-questions', title: 'Questions to Ask Your Doctor', desc: 'Understanding hip dysplasia in adolescents.', tag: 'Hip Dysplasia', file: 'questions-to-ask-your-doctor-understanding-hip-dysplasia-in-adolescents.pdf' },
+        // Combined Surgery Resources
+        { id: 'combined-preop', title: 'Combined Surgery Pre-Operative', desc: 'Preparing for combined hip preservation surgery.', tag: 'Combined', file: 'combined-hip-preservation-surgery-pre-operative.pdf' },
+        { id: 'combined-checklist', title: 'Combined Surgery Checklist', desc: 'Checklist for arthroscopy and Ganz osteotomy.', tag: 'Combined', file: 'surgery-checklist-combined-hip-arthroscopy-and-ganz-osteotomy.pdf' },
+        { id: 'combined-recovery', title: 'Managing Recovery from Combined Surgeries', desc: 'Recovery guidance for dual procedures.', tag: 'Combined', file: 'managing-recovery-from-combined-surgeries.pdf' },
+        { id: 'combined-painpump', title: 'Ambit Pain Control Pump', desc: 'Instructions for using the pain pump.', tag: 'Combined', file: 'ambit-pain-control-pump-instructions.pdf' },
+        // Therapy & Rehab Resources
+        { id: 'rehab-arthroscopy', title: 'Hip Arthroscopy Rehabilitation', desc: 'Physical therapy protocol for arthroscopy patients.', tag: 'Therapy & Rehab', file: 'hip-arthroscopy-rehabilitation.pdf' },
+        { id: 'rehab-pao', title: 'PAO Rehabilitation', desc: 'Physical therapy protocol for PAO patients.', tag: 'Therapy & Rehab', file: 'pao-rehab.pdf' },
+        { id: 'rehab-exercises', title: 'Hip Preservation PT Exercises', desc: 'Exercise guide for hip preservation patients.', tag: 'Therapy & Rehab', file: 'hip-preservation-physical-therapy-exercises.pdf' },
+        { id: 'rehab-log', title: 'Daily Recovery Log', desc: 'Track your daily recovery progress.', tag: 'Therapy & Rehab', file: 'daily-recovery-log.pdf' },
       ];
 
       // Elements
@@ -481,12 +500,12 @@
       // Render content lists
       function renderList(container, items, type) {
         container.innerHTML = items.map(item => `
-          <div class="content-item" data-type="${type}" data-id="${item.id}" ${item.youtube ? `data-youtube="${item.youtube}"` : ''} ${item.file ? `data-file="${item.file}"` : ''}>
+          <div class="content-item" data-type="${item.file ? 'pdf' : type}" data-id="${item.id}" ${item.youtube ? `data-youtube="${item.youtube}"` : ''} ${item.file ? `data-file="${item.file}"` : ''}>
             <h4>${item.title}</h4>
             <p>${item.desc}</p>
             <div class="meta">
               ${item.tag ? `<span class="tag">${item.tag}</span>` : ''}
-              ${type === 'video' ? '<span>Video</span>' : type === 'doc' ? '<span>PDF Document</span>' : '<span>Read more</span>'}
+              ${type === 'video' ? '<span>Video</span>' : item.file ? '<span>PDF Document</span>' : '<span>Read more</span>'}
             </div>
           </div>
         `).join('');
@@ -508,12 +527,13 @@
             const ytId = item.dataset.youtube;
             document.querySelector('.modal-content').classList.add('video-modal');
             modalBody.innerHTML = `<iframe class="video-embed" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-          } else if (type === 'doc') {
+          } else if (type === 'doc' || type === 'pdf') {
             const file = item.dataset.file;
             document.querySelector('.modal-content').classList.add('video-modal');
             modalBody.innerHTML = `
               <div style="display:flex;flex-direction:column;height:100%;">
-                <div style="padding:12px 0;display:flex;justify-content:flex-end;">
+                <div style="padding:12px 0;display:flex;justify-content:flex-end;gap:12px;">
+                  <a href="/pdfs/${file}" target="_blank" style="background:#f3f4f6;color:#4a1c7c;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;border:1px solid #e5e7eb;">Open in New Tab</a>
                   <a href="/pdfs/${file}" download class="download-btn" style="background:linear-gradient(135deg,#4a1c7c,#6b2c9e);color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;">Download PDF</a>
                 </div>
                 <iframe src="/pdfs/${file}" style="flex:1;width:100%;border:none;border-radius:8px;min-height:500px;"></iframe>
