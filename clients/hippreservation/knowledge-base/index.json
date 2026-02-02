@@ -1,35 +1,363 @@
 {
   "documents": [
-    {"path": "conditions/dysplasia.md", "title": "Hip Dysplasia", "category": "conditions"},
-    {"path": "conditions/fai.md", "title": "Femoroacetabular Impingement (FAI)", "category": "conditions"},
-    {"path": "conditions/labral-tears.md", "title": "Labral Tears", "category": "conditions"},
-    {"path": "conditions/arthritis.md", "title": "Hip Arthritis", "category": "conditions"},
-    {"path": "conditions/bursitis-tendonitis.md", "title": "Bursitis & Tendonitis", "category": "conditions"},
-    {"path": "procedures/pao.md", "title": "Periacetabular Osteotomy (PAO)", "category": "procedures"},
-    {"path": "procedures/hip-arthroscopy.md", "title": "Hip Arthroscopy", "category": "procedures"},
-    {"path": "procedures/combined-surgery.md", "title": "Combined Hip Arthroscopy & PAO", "category": "procedures"},
-    {"path": "providers/dr-aaron-casp.md", "title": "Dr. Aaron Casp", "category": "providers"},
-    {"path": "providers/dr-daniel-haber.md", "title": "Dr. Daniel Haber", "category": "providers"},
-    {"path": "providers/dr-james-genuario.md", "title": "Dr. James Genuario", "category": "providers"},
-    {"path": "providers/dr-michael-ellman.md", "title": "Dr. Michael Ellman", "category": "providers"},
-    {"path": "providers/dr-nimesh-patel.md", "title": "Dr. Nimesh Patel", "category": "providers"},
-    {"path": "providers/dr-ronald-hugate.md", "title": "Dr. Ronald Hugate", "category": "providers"},
-    {"path": "blog/pregnancy-after-pao.md", "title": "Pregnancy After PAO", "category": "blog"},
-    {"path": "blog/pao-screws-permanent-vs-temporary.md", "title": "PAO Screws: Permanent vs Temporary", "category": "blog"},
-    {"path": "blog/hip-pain-at-25.md", "title": "Hip Pain at 25", "category": "blog"},
-    {"path": "blog/hip-microinstability.md", "title": "Hip Microinstability", "category": "blog"},
-    {"path": "blog/hip-dysplasia-guide-ebook.md", "title": "Hip Dysplasia Guide", "category": "blog"},
-    {"path": "blog/early-diagnosis-hip-dysplasia.md", "title": "Early Diagnosis of Hip Dysplasia", "category": "blog"},
-    {"path": "blog/exercises-prepare-hip-surgery.md", "title": "Exercises to Prepare for Hip Surgery", "category": "blog"},
-    {"path": "blog/patient-stories-pao.md", "title": "Patient Stories: PAO", "category": "blog"},
-    {"path": "blog/physical-therapy-hip-preservation.md", "title": "Physical Therapy for Hip Preservation", "category": "blog"},
-    {"path": "blog/rehabilitation-tips-faster-recovery.md", "title": "Rehabilitation Tips for Faster Recovery", "category": "blog"},
-    {"path": "about.md", "title": "About Us", "category": "general"},
-    {"path": "faq.md", "title": "Frequently Asked Questions", "category": "general"},
-    {"path": "patient-resources.md", "title": "Patient Resources", "category": "general"},
-    {"path": "second-opinion.md", "title": "Get a Second Opinion", "category": "general"},
-    {"path": "surgical-candidate.md", "title": "Are You a Surgical Candidate?", "category": "general"}
+    {
+      "path": "conditions/dysplasia.md",
+      "title": "Hip Dysplasia",
+      "category": "conditions"
+    },
+    {
+      "path": "conditions/fai.md",
+      "title": "Femoroacetabular Impingement (FAI)",
+      "category": "conditions"
+    },
+    {
+      "path": "conditions/labral-tears.md",
+      "title": "Labral Tears",
+      "category": "conditions"
+    },
+    {
+      "path": "conditions/arthritis.md",
+      "title": "Hip Arthritis",
+      "category": "conditions"
+    },
+    {
+      "path": "conditions/bursitis-tendonitis.md",
+      "title": "Bursitis & Tendonitis",
+      "category": "conditions"
+    },
+    {
+      "path": "procedures/pao.md",
+      "title": "Periacetabular Osteotomy (PAO)",
+      "category": "procedures"
+    },
+    {
+      "path": "procedures/hip-arthroscopy.md",
+      "title": "Hip Arthroscopy",
+      "category": "procedures"
+    },
+    {
+      "path": "procedures/combined-surgery.md",
+      "title": "Combined Hip Arthroscopy & PAO",
+      "category": "procedures"
+    },
+    {
+      "path": "providers/dr-aaron-casp.md",
+      "title": "Dr. Aaron Casp",
+      "category": "providers"
+    },
+    {
+      "path": "providers/dr-daniel-haber.md",
+      "title": "Dr. Daniel Haber",
+      "category": "providers"
+    },
+    {
+      "path": "providers/dr-james-genuario.md",
+      "title": "Dr. James Genuario",
+      "category": "providers"
+    },
+    {
+      "path": "providers/dr-michael-ellman.md",
+      "title": "Dr. Michael Ellman",
+      "category": "providers"
+    },
+    {
+      "path": "providers/dr-nimesh-patel.md",
+      "title": "Dr. Nimesh Patel",
+      "category": "providers"
+    },
+    {
+      "path": "providers/dr-ronald-hugate.md",
+      "title": "Dr. Ronald Hugate",
+      "category": "providers"
+    },
+    {
+      "path": "blog/pregnancy-after-pao.md",
+      "title": "Pregnancy After PAO",
+      "category": "blog"
+    },
+    {
+      "path": "blog/pao-screws-permanent-vs-temporary.md",
+      "title": "PAO Screws: Permanent vs Temporary",
+      "category": "blog"
+    },
+    {
+      "path": "blog/hip-pain-at-25.md",
+      "title": "Hip Pain at 25",
+      "category": "blog"
+    },
+    {
+      "path": "blog/hip-microinstability.md",
+      "title": "Hip Microinstability",
+      "category": "blog"
+    },
+    {
+      "path": "blog/hip-dysplasia-guide-ebook.md",
+      "title": "Hip Dysplasia Guide",
+      "category": "blog"
+    },
+    {
+      "path": "blog/early-diagnosis-hip-dysplasia.md",
+      "title": "Early Diagnosis of Hip Dysplasia",
+      "category": "blog"
+    },
+    {
+      "path": "blog/exercises-prepare-hip-surgery.md",
+      "title": "Exercises to Prepare for Hip Surgery",
+      "category": "blog"
+    },
+    {
+      "path": "blog/patient-stories-pao.md",
+      "title": "Patient Stories: PAO",
+      "category": "blog"
+    },
+    {
+      "path": "blog/physical-therapy-hip-preservation.md",
+      "title": "Physical Therapy for Hip Preservation",
+      "category": "blog"
+    },
+    {
+      "path": "blog/rehabilitation-tips-faster-recovery.md",
+      "title": "Rehabilitation Tips for Faster Recovery",
+      "category": "blog"
+    },
+    {
+      "path": "about.md",
+      "title": "About Us",
+      "category": "general"
+    },
+    {
+      "path": "faq.md",
+      "title": "Frequently Asked Questions",
+      "category": "general"
+    },
+    {
+      "path": "patient-resources.md",
+      "title": "Patient Resources",
+      "category": "general"
+    },
+    {
+      "path": "second-opinion.md",
+      "title": "Get a Second Opinion",
+      "category": "general"
+    },
+    {
+      "path": "surgical-candidate.md",
+      "title": "Are You a Surgical Candidate?",
+      "category": "general"
+    },
+    {
+      "path": "pdfs/ambit-pain-control-pump-instructions.md",
+      "title": "Ambit Pain Control Pump Instructions",
+      "category": "combined",
+      "folder": "Combined Hip Arthroscopy and PAO",
+      "source": "Ambit Pain Control Pump Instructions.pdf",
+      "pdfFile": "ambit-pain-control-pump-instructions.pdf",
+      "pages": 2,
+      "chars": 1731
+    },
+    {
+      "path": "pdfs/combined-hip-preservation-surgery-pre-operative.md",
+      "title": "Combined Hip Preservation Surgery Pre-Operative",
+      "category": "combined",
+      "folder": "Combined Hip Arthroscopy and PAO",
+      "source": "Combined Hip Preservation Surgery Pre-Operative.pdf",
+      "pdfFile": "combined-hip-preservation-surgery-pre-operative.pdf",
+      "pages": 2,
+      "chars": 2081
+    },
+    {
+      "path": "pdfs/managing-recovery-from-combined-surgeries.md",
+      "title": "Managing Recovery from Combined Surgeries",
+      "category": "combined",
+      "folder": "Combined Hip Arthroscopy and PAO",
+      "source": "Managing Recovery from Combined Surgeries.pdf",
+      "pdfFile": "managing-recovery-from-combined-surgeries.pdf",
+      "pages": 7,
+      "chars": 0
+    },
+    {
+      "path": "pdfs/surgery-checklist-combined-hip-arthroscopy-and-ganz-osteotomy.md",
+      "title": "Surgery Checklist (Combined Hip Arthroscopy and Ganz Osteotomy)",
+      "category": "combined",
+      "folder": "Combined Hip Arthroscopy and PAO",
+      "source": "Surgery Checklist (Combined Hip Arthroscopy and Ganz Osteotomy).pdf",
+      "pdfFile": "surgery-checklist-combined-hip-arthroscopy-and-ganz-osteotomy.pdf",
+      "pages": 2,
+      "chars": 1561
+    },
+    {
+      "path": "pdfs/everyday-life-after-hip-arthroscopy.md",
+      "title": "Everyday Life After Hip Arthroscopy",
+      "category": "arthroscopy",
+      "folder": "Hip Arthroscopy",
+      "source": "Everyday Life After Hip Arthroscopy.pdf",
+      "pdfFile": "everyday-life-after-hip-arthroscopy.pdf",
+      "pages": 8,
+      "chars": 0
+    },
+    {
+      "path": "pdfs/hip-arthroscopy-pre-and-post-operative-instructions.md",
+      "title": "Hip Arthroscopy Pre and Post-Operative Instructions",
+      "category": "arthroscopy",
+      "folder": "Hip Arthroscopy",
+      "source": "Hip Arthroscopy Pre and Post-Operative Instructions (1).pdf",
+      "pdfFile": "hip-arthroscopy-pre-and-post-operative-instructions.pdf",
+      "pages": 3,
+      "chars": 5458
+    },
+    {
+      "path": "pdfs/return-to-sport-timeline-after-hip-arthroscopy.md",
+      "title": "Return-to-Sport Timeline After Hip Arthroscopy",
+      "category": "arthroscopy",
+      "folder": "Hip Arthroscopy",
+      "source": "Return-to-Sport Timeline After Hip Arthroscopy.pdf",
+      "pdfFile": "return-to-sport-timeline-after-hip-arthroscopy.pdf",
+      "pages": 9,
+      "chars": 5066
+    },
+    {
+      "path": "pdfs/surgery-checklist.md",
+      "title": "Surgery Checklist",
+      "category": "arthroscopy",
+      "folder": "Hip Arthroscopy",
+      "source": "Surgery Checklist.pdf",
+      "pdfFile": "surgery-checklist.pdf",
+      "pages": 2,
+      "chars": 1298
+    },
+    {
+      "path": "pdfs/diagnosis-of-hip-dysplasia.md",
+      "title": "Diagnosis of Hip Dysplasia",
+      "category": "dysplasia",
+      "folder": "Hip Dysplasia",
+      "source": "Diagnosis of Hip Dysplasia (1).pdf",
+      "pdfFile": "diagnosis-of-hip-dysplasia.pdf",
+      "pages": 4,
+      "chars": 4225
+    },
+    {
+      "path": "pdfs/questions-to-ask-your-doctor-understanding-hip-dysplasia-in-adolescents.md",
+      "title": "Questions to Ask Your Doctor  Understanding Hip Dysplasia in Adolescents",
+      "category": "dysplasia",
+      "folder": "Hip Dysplasia",
+      "source": "Questions to Ask Your Doctor_ Understanding Hip Dysplasia in Adolescents (1).pdf",
+      "pdfFile": "questions-to-ask-your-doctor-understanding-hip-dysplasia-in-adolescents.pdf",
+      "pages": 4,
+      "chars": 3764
+    },
+    {
+      "path": "pdfs/understanding-hip-dysplasia-what-you-need-to-know.md",
+      "title": "Understanding Hip Dysplasia  What You Need to Know",
+      "category": "dysplasia",
+      "folder": "Hip Dysplasia",
+      "source": "Understanding Hip Dysplasia_ What You Need to Know.pdf",
+      "pdfFile": "understanding-hip-dysplasia-what-you-need-to-know.pdf",
+      "pages": 5,
+      "chars": 4846
+    },
+    {
+      "path": "pdfs/what-causes-hip-dysplasia.md",
+      "title": "What Causes Hip Dysplasia",
+      "category": "dysplasia",
+      "folder": "Hip Dysplasia",
+      "source": "What Causes Hip Dysplasia_.pdf",
+      "pdfFile": "what-causes-hip-dysplasia.pdf",
+      "pages": 3,
+      "chars": 3555
+    },
+    {
+      "path": "pdfs/life-after-pao-recovery-physical-therapy-and-faqs.md",
+      "title": "Life After PAO  Recovery, Physical Therapy, and FAQs",
+      "category": "pao",
+      "folder": "Periacetabular Osteotomy",
+      "source": "Life After PAO_ Recovery, Physical Therapy, and FAQs.pdf",
+      "pdfFile": "life-after-pao-recovery-physical-therapy-and-faqs.pdf",
+      "pages": 6,
+      "chars": 7018
+    },
+    {
+      "path": "pdfs/overview-of-periacetabular-osteotomy-pao-and-what-to-expect.md",
+      "title": "Overview of Periacetabular Osteotomy (PAO) and What to Expect",
+      "category": "pao",
+      "folder": "Periacetabular Osteotomy",
+      "source": "Overview of Periacetabular Osteotomy (PAO) and What to Expect (1).pdf",
+      "pdfFile": "overview-of-periacetabular-osteotomy-pao-and-what-to-expect.pdf",
+      "pages": 5,
+      "chars": 5929
+    },
+    {
+      "path": "pdfs/pao-surgery-checklist.md",
+      "title": "PAO Surgery Checklist",
+      "category": "pao",
+      "folder": "Periacetabular Osteotomy",
+      "source": "PAO Surgery Checklist.pdf",
+      "pdfFile": "pao-surgery-checklist.pdf",
+      "pages": 5,
+      "chars": 3618
+    },
+    {
+      "path": "pdfs/pao-surgery-risks-complications-and-recovery-process.md",
+      "title": "PAO Surgery  Risks, Complications, and Recovery Process",
+      "category": "pao",
+      "folder": "Periacetabular Osteotomy",
+      "source": "PAO Surgery_ Risks, Complications, and Recovery Process.pdf",
+      "pdfFile": "pao-surgery-risks-complications-and-recovery-process.pdf",
+      "pages": 7,
+      "chars": 8054
+    },
+    {
+      "path": "pdfs/preparing-for-pao-surgery.md",
+      "title": "Preparing for PAO Surgery",
+      "category": "pao",
+      "folder": "Periacetabular Osteotomy",
+      "source": "Preparing for PAO Surgery.pdf",
+      "pdfFile": "preparing-for-pao-surgery.pdf",
+      "pages": 6,
+      "chars": 7059
+    },
+    {
+      "path": "pdfs/daily-recovery-log.md",
+      "title": "Daily Recovery Log",
+      "category": "rehab",
+      "folder": "Therapy and Rehab",
+      "source": "Daily Recovery Log.pdf",
+      "pdfFile": "daily-recovery-log.pdf",
+      "pages": 1,
+      "chars": 0
+    },
+    {
+      "path": "pdfs/hip-arthroscopy-rehabilitation.md",
+      "title": "Hip Arthroscopy Rehabilitation",
+      "category": "rehab",
+      "folder": "Therapy and Rehab",
+      "source": "Hip Arthroscopy Rehabilitation.pdf",
+      "pdfFile": "hip-arthroscopy-rehabilitation.pdf",
+      "pages": 13,
+      "chars": 6443
+    },
+    {
+      "path": "pdfs/hip-preservation-physical-therapy-exercises.md",
+      "title": "Hip Preservation Physical Therapy Exercises",
+      "category": "rehab",
+      "folder": "Therapy and Rehab",
+      "source": "Hip Preservation Physical Therapy Exercises.pdf",
+      "pdfFile": "hip-preservation-physical-therapy-exercises.pdf",
+      "pages": 7,
+      "chars": 2494
+    },
+    {
+      "path": "pdfs/pao-rehab.md",
+      "title": "PAO Rehab",
+      "category": "rehab",
+      "folder": "Therapy and Rehab",
+      "source": "PAO Rehab.pdf",
+      "pdfFile": "pao-rehab.pdf",
+      "pages": 7,
+      "chars": 8152
+    }
   ],
   "crawledAt": "2026-02-02T13:49:00Z",
-  "totalDocs": 29
+  "totalDocs": 50,
+  "pdfIngestedAt": "2026-02-02T23:52:41.874Z",
+  "pdfCount": 21
 }

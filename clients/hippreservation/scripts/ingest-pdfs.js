@@ -9,11 +9,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PDF_DIR = path.join(__dirname, '..', 'public', 'pdfs');
-const KB_DIR = path.join(__dirname, '..', 'knowledge-base', 'pdfs');
+const PDF_DIR = path.join(__dirname, '..', 'knowledge-base', 'patient resources');
+const KB_OUTPUT_DIR = path.join(__dirname, '..', 'knowledge-base', 'pdfs');
+const PUBLIC_PDF_DIR = path.join(__dirname, '..', 'public', 'pdfs');
 const INDEX_PATH = path.join(__dirname, '..', 'knowledge-base', 'index.json');
 
-// Try to load pdf-parse, provide fallback instructions if not installed
+// Try to load pdf-parse
 let pdfParse;
 try {
   pdfParse = (await import('pdf-parse')).default;
@@ -21,6 +22,33 @@ try {
   console.log('❌ pdf-parse not installed. Run: npm install pdf-parse');
   console.log('   Then re-run this script.\n');
   process.exit(1);
+}
+
+/**
+ * Recursively find all PDF files in a directory
+ */
+function findPDFs(dir, basePath = '') {
+  const results = [];
+  const items = fs.readdirSync(dir);
+  
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const relativePath = basePath ? path.join(basePath, item) : item;
+    const stat = fs.statSync(fullPath);
+    
+    if (stat.isDirectory()) {
+      results.push(...findPDFs(fullPath, relativePath));
+    } else if (item.toLowerCase().endsWith('.pdf')) {
+      results.push({
+        fullPath,
+        relativePath,
+        filename: item,
+        category: basePath || 'general'
+      });
+    }
+  }
+  
+  return results;
 }
 
 /**
@@ -48,74 +76,16 @@ function cleanText(text) {
 }
 
 /**
- * Chunk text into smaller pieces for retrieval
- */
-function chunkText(text, maxSize = 600) {
-  const chunks = [];
-  const paragraphs = text.split(/\n\n+/);
-  let current = '';
-  
-  for (const para of paragraphs) {
-    if ((current + para).length > maxSize && current) {
-      chunks.push({
-        text: current.trim(),
-        type: detectChunkType(current)
-      });
-      current = para;
-    } else {
-      current += (current ? '\n\n' : '') + para;
-    }
-  }
-  
-  if (current) {
-    chunks.push({
-      text: current.trim(),
-      type: detectChunkType(current)
-    });
-  }
-  
-  return chunks;
-}
-
-/**
- * Detect the type of content in a chunk
- */
-function detectChunkType(text) {
-  const lower = text.toLowerCase();
-  
-  if (lower.includes('emergency') || lower.includes('call 911') || 
-      lower.includes('red flag') || lower.includes('seek immediate')) {
-    return 'emergency';
-  }
-  if (lower.includes('day 1') || lower.includes('week 1') || 
-      lower.includes('timeline') || lower.includes('day-by-day')) {
-    return 'timeline';
-  }
-  if (lower.includes('protocol') || lower.includes('step 1') || 
-      lower.includes('procedure') || lower.includes('instructions')) {
-    return 'protocol';
-  }
-  if (lower.includes('tip') || lower.includes('recommendation') || 
-      lower.includes('advice') || lower.includes('best practice')) {
-    return 'advice';
-  }
-  if (lower.includes('q:') || lower.includes('question') || 
-      lower.includes('faq') || lower.includes('a:')) {
-    return 'faq';
-  }
-  
-  return 'general';
-}
-
-/**
  * Generate a clean ID from filename
  */
 function generateId(filename) {
   return filename
     .replace('.pdf', '')
+    .replace(/\(\d+\)/g, '') // Remove (1), (2) etc
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/^-|-$/g, '')
+    .replace(/-+/g, '-');
 }
 
 /**
@@ -124,8 +94,23 @@ function generateId(filename) {
 function generateTitle(filename) {
   return filename
     .replace('.pdf', '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+    .replace(/\(\d+\)/g, '') // Remove (1), (2) etc
+    .replace(/_/g, ' ')
+    .trim();
+}
+
+/**
+ * Map folder names to categories
+ */
+function mapCategory(folderName) {
+  const map = {
+    'Periacetabular Osteotomy': 'pao',
+    'Therapy and Rehab': 'rehab',
+    'Hip Dysplasia': 'dysplasia',
+    'Combined Hip Arthroscopy and PAO': 'combined',
+    'Hip Arthroscopy': 'arthroscopy'
+  };
+  return map[folderName] || folderName.toLowerCase().replace(/\s+/g, '-');
 }
 
 /**
@@ -133,89 +118,110 @@ function generateTitle(filename) {
  */
 async function ingestPDFs() {
   console.log('📄 Hip Preservation PDF Ingestion\n');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
   
   // Check if PDF directory exists
   if (!fs.existsSync(PDF_DIR)) {
     console.log(`\n❌ PDF directory not found: ${PDF_DIR}`);
-    console.log('   Create this folder and add your PDFs, then re-run.');
-    fs.mkdirSync(PDF_DIR, { recursive: true });
-    console.log('   ✓ Created empty folder for you.\n');
     return;
   }
   
-  // Get PDF files
-  const files = fs.readdirSync(PDF_DIR).filter(f => f.toLowerCase().endsWith('.pdf'));
+  // Find all PDFs recursively
+  const pdfFiles = findPDFs(PDF_DIR);
   
-  if (files.length === 0) {
+  if (pdfFiles.length === 0) {
     console.log(`\n⚠️  No PDF files found in: ${PDF_DIR}`);
-    console.log('   Add your PDFs to this folder and re-run.\n');
     return;
   }
   
-  console.log(`\n📁 Found ${files.length} PDF files:\n`);
-  files.forEach(f => console.log(`   • ${f}`));
+  console.log(`\n📁 Found ${pdfFiles.length} PDF files:\n`);
   
-  // Create KB pdfs directory
-  fs.mkdirSync(KB_DIR, { recursive: true });
+  // Group by category for display
+  const byCategory = {};
+  for (const pdf of pdfFiles) {
+    const cat = pdf.category;
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(pdf.filename);
+  }
+  
+  for (const [cat, files] of Object.entries(byCategory)) {
+    console.log(`   📂 ${cat} (${files.length})`);
+    files.forEach(f => console.log(`      • ${f}`));
+  }
+  
+  // Create output directories
+  fs.mkdirSync(KB_OUTPUT_DIR, { recursive: true });
+  fs.mkdirSync(PUBLIC_PDF_DIR, { recursive: true });
   
   const kbEntries = [];
-  const chunkStats = { emergency: 0, timeline: 0, protocol: 0, advice: 0, faq: 0, general: 0 };
+  let successCount = 0;
+  let errorCount = 0;
   
   console.log('\n' + '-'.repeat(50));
+  console.log('\n🔄 Processing PDFs...\n');
   
-  for (const file of files) {
-    console.log(`\n📄 Processing: ${file}`);
+  for (const pdf of pdfFiles) {
+    const id = generateId(pdf.filename);
+    const title = generateTitle(pdf.filename);
+    const category = mapCategory(pdf.category);
     
-    const filePath = path.join(PDF_DIR, file);
-    const id = generateId(file);
-    const title = generateTitle(file);
+    process.stdout.write(`   Processing: ${pdf.filename.substring(0, 40)}...`);
     
     try {
       // Extract PDF content
-      const extracted = await extractPDF(filePath);
+      const extracted = await extractPDF(pdf.fullPath);
       const cleanedText = cleanText(extracted.text);
-      const chunks = chunkText(cleanedText);
       
-      // Count chunk types
-      chunks.forEach(c => chunkStats[c.type]++);
+      if (cleanedText.length < 50) {
+        console.log(' ⚠️ (very little text extracted)');
+      } else {
+        console.log(` ✓ (${cleanedText.length.toLocaleString()} chars)`);
+      }
       
       // Create markdown file
       const mdContent = `---
 title: "${title}"
-source: "${file}"
-category: pdf
+source: "${pdf.filename}"
+category: "${category}"
+folder: "${pdf.category}"
 pages: ${extracted.pages}
 extractedAt: "${new Date().toISOString()}"
-chunkCount: ${chunks.length}
 ---
 
 # ${title}
 
+**Category:** ${pdf.category}  
+**Pages:** ${extracted.pages}
+
+---
+
 ${cleanedText}
 `;
       
-      const mdPath = path.join(KB_DIR, `${id}.md`);
+      const mdPath = path.join(KB_OUTPUT_DIR, `${id}.md`);
       fs.writeFileSync(mdPath, mdContent);
+      
+      // Copy PDF to public folder for viewing
+      const publicPdfPath = path.join(PUBLIC_PDF_DIR, `${id}.pdf`);
+      fs.copyFileSync(pdf.fullPath, publicPdfPath);
       
       // Add to KB entries
       kbEntries.push({
         path: `pdfs/${id}.md`,
         title: title,
-        category: 'pdf',
-        source: file,
+        category: category,
+        folder: pdf.category,
+        source: pdf.filename,
+        pdfFile: `${id}.pdf`,
         pages: extracted.pages,
-        chunks: chunks.length,
-        chunkTypes: [...new Set(chunks.map(c => c.type))]
+        chars: cleanedText.length
       });
       
-      console.log(`   ✓ Extracted: ${cleanedText.length.toLocaleString()} chars`);
-      console.log(`   ✓ Pages: ${extracted.pages}`);
-      console.log(`   ✓ Chunks: ${chunks.length}`);
-      console.log(`   ✓ Saved to: knowledge-base/pdfs/${id}.md`);
+      successCount++;
       
     } catch (error) {
-      console.log(`   ❌ Error: ${error.message}`);
+      console.log(` ❌ Error: ${error.message}`);
+      errorCount++;
     }
   }
   
@@ -229,29 +235,36 @@ ${cleanedText}
   }
   
   // Remove old PDF entries and add new ones
-  index.documents = index.documents.filter(d => d.category !== 'pdf');
+  index.documents = index.documents.filter(d => !d.path.startsWith('pdfs/'));
   index.documents.push(...kbEntries);
   index.totalDocs = index.documents.length;
   index.pdfIngestedAt = new Date().toISOString();
+  index.pdfCount = kbEntries.length;
   
   fs.writeFileSync(INDEX_PATH, JSON.stringify(index, null, 2));
   
   // Summary
   console.log('✅ PDF INGESTION COMPLETE\n');
   console.log('📊 Summary:');
-  console.log(`   • PDFs processed: ${kbEntries.length}`);
-  console.log(`   • Total chunks created: ${Object.values(chunkStats).reduce((a, b) => a + b, 0)}`);
-  console.log(`   • Chunk breakdown:`);
-  Object.entries(chunkStats).forEach(([type, count]) => {
-    if (count > 0) console.log(`     - ${type}: ${count}`);
-  });
-  console.log(`\n   • Knowledge base now has ${index.totalDocs} documents`);
-  console.log(`   • Index updated: knowledge-base/index.json\n`);
+  console.log(`   • PDFs processed: ${successCount}`);
+  console.log(`   • Errors: ${errorCount}`);
+  console.log(`   • Total KB documents: ${index.totalDocs}`);
+  console.log(`   • PDFs copied to: public/pdfs/`);
+  console.log(`   • Markdown saved to: knowledge-base/pdfs/\n`);
   
-  console.log('🚀 Next steps:');
+  console.log('📂 By category:');
+  const catCounts = {};
+  kbEntries.forEach(e => {
+    catCounts[e.folder] = (catCounts[e.folder] || 0) + 1;
+  });
+  Object.entries(catCounts).forEach(([cat, count]) => {
+    console.log(`   • ${cat}: ${count}`);
+  });
+  
+  console.log('\n🚀 Next steps:');
   console.log('   1. Restart the server to load new KB content');
-  console.log('   2. Test queries related to your PDF content');
-  console.log('   3. Verify the chatbot uses PDF information in responses\n');
+  console.log('   2. Commit and push changes to deploy');
+  console.log('   3. Test queries related to PDF content\n');
 }
 
 // Run
