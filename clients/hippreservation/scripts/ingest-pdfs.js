@@ -9,7 +9,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PDF_DIR = path.join(__dirname, '..', 'knowledge-base', 'patient resources');
+// Scan all PDFs under knowledge-base (e.g. Hip Arthroscopy/, PAO/, etc.)
+const PDF_DIR = path.join(__dirname, '..', 'knowledge-base');
 const KB_OUTPUT_DIR = path.join(__dirname, '..', 'knowledge-base', 'pdfs');
 const PUBLIC_PDF_DIR = path.join(__dirname, '..', 'public', 'pdfs');
 const INDEX_PATH = path.join(__dirname, '..', 'knowledge-base', 'index.json');

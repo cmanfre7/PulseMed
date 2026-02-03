@@ -6,331 +6,776 @@
   <title>Hip Preservation Navigator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: #ffffff; min-height: 100vh; }
+    :root {
+      --primary: #5b2d82;
+      --primary-light: #7c4dab;
+      --primary-dark: #3d1d5c;
+      --gold: #c9a962;
+      --gold-light: #e8d5a3;
+      --surface: #ffffff;
+      --surface-elevated: #fafbfc;
+      --surface-dim: #f4f5f7;
+      --text-primary: #1a1d21;
+      --text-secondary: #5e6670;
+      --text-muted: #8b939f;
+      --border: #e4e7ec;
+      --border-light: #f0f2f5;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+      --shadow-xl: 0 24px 80px rgba(0,0,0,0.18);
+      --shadow-glow: 0 0 40px rgba(91,45,130,0.25);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-    /* Widget Container */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background: #f8f9fb; min-height: 100vh; }
+
+    /* ===== WIDGET CONTAINER ===== */
     #hipguide-widget {
       position: fixed;
       bottom: 24px;
       right: 24px;
       z-index: 9999;
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     }
 
-    /* Chat Bubble */
+    /* ===== FLOATING BUBBLE ===== */
     .chat-bubble {
-      width: 60px;
-      height: 60px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 20px rgba(74, 28, 124, 0.4);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      transition: all var(--transition-smooth);
       position: relative;
+      overflow: hidden;
     }
-    .chat-bubble:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(74, 28, 124, 0.5); }
-    .chat-bubble:active { transform: scale(0.95); }
-    .chat-bubble svg { width: 28px; height: 28px; fill: white; }
     .chat-bubble::before {
       content: '';
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
       border-radius: 50%;
-      background: rgba(74, 28, 124, 0.3);
-      animation: pulse 2s ease-out infinite;
     }
-    .chat-bubble.open::before { animation: none; opacity: 0; }
-    @keyframes pulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.6); opacity: 0; } }
+    .chat-bubble::after {
+      content: '';
+      position: absolute;
+      width: 120%;
+      height: 120%;
+      border-radius: 50%;
+      border: 2px solid var(--primary-light);
+      opacity: 0.4;
+      animation: pulse-ring 2.5s ease-out infinite;
+    }
+    .chat-bubble:hover { 
+      transform: scale(1.08) translateY(-2px); 
+      box-shadow: var(--shadow-xl), 0 0 60px rgba(91,45,130,0.35);
+    }
+    .chat-bubble:active { transform: scale(0.95); }
+    .chat-bubble.open::after { animation: none; opacity: 0; }
+    .chat-bubble svg { 
+      width: 28px; 
+      height: 28px; 
+      fill: white; 
+      position: relative; 
+      z-index: 1;
+      transition: transform var(--transition-smooth);
+    }
+    .chat-bubble:hover svg { transform: scale(1.1); }
+    .chat-bubble.open svg { transform: rotate(90deg) scale(0.9); }
+    
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.4; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
 
-    /* Chat Window */
+    /* ===== CHAT WINDOW ===== */
     .chat-window {
       position: absolute;
-      bottom: 76px;
+      bottom: 80px;
       right: 0;
-      width: 400px;
-      height: 580px;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18);
+      width: 420px;
+      height: 620px;
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px) scale(0.95);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(24px) scale(0.92);
+      transform-origin: bottom right;
+      transition: all var(--transition-smooth);
+      border: 1px solid var(--border-light);
     }
-    .chat-window.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+    .chat-window.open { 
+      opacity: 1; 
+      visibility: visible; 
+      transform: translateY(0) scale(1); 
+    }
 
-    /* Header */
+    /* ===== HEADER ===== */
     .chat-header {
-      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       color: white;
-      padding: 14px 16px;
+      padding: 18px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
     }
-    .chat-header-left { display: flex; align-items: center; gap: 10px; }
-    .chat-avatar {
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.2);
+    .chat-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
       border-radius: 50%;
+    }
+    .chat-header-left { display: flex; align-items: center; gap: 12px; position: relative; }
+    .chat-avatar {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-md);
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 1px solid rgba(255,255,255,0.2);
     }
-    .chat-title h3 { font-size: 15px; font-weight: 600; margin: 0; }
-    .chat-title span { font-size: 11px; opacity: 0.85; }
+    .chat-avatar svg { width: 24px; height: 24px; fill: white; }
+    .chat-title h3 { font-size: 16px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+    .chat-title span { 
+      font-size: 12px; 
+      opacity: 0.8; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      margin-top: 2px;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: status-pulse 2s ease infinite;
+    }
+    @keyframes status-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
     .close-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all var(--transition-fast);
+      position: relative;
     }
-    .close-btn:hover { background: rgba(255, 255, 255, 0.25); }
-    .close-btn svg { width: 16px; height: 16px; fill: white; }
+    .close-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+    .close-btn svg { width: 18px; height: 18px; fill: white; }
 
-    /* Tab Bar */
+    /* ===== TAB BAR ===== */
     .tab-bar {
       display: flex;
-      background: #f8f9fa;
-      border-bottom: 1px solid #e5e7eb;
+      background: var(--surface);
+      padding: 6px;
+      gap: 4px;
+      border-bottom: 1px solid var(--border-light);
       flex-shrink: 0;
     }
     .tab-btn {
       flex: 1;
-      padding: 10px 8px;
-      background: none;
+      padding: 10px 12px;
+      background: transparent;
       border: none;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 500;
-      color: #6b7280;
+      color: var(--text-secondary);
       cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
-    .tab-btn:hover { color: #4a1c7c; background: #f3f4f6; }
-    .tab-btn.active { color: #4a1c7c; border-bottom-color: #4a1c7c; background: white; }
+    .tab-btn svg { width: 16px; height: 16px; fill: currentColor; opacity: 0.7; }
+    .tab-btn:hover { background: var(--surface-dim); color: var(--text-primary); }
+    .tab-btn.active { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+    .tab-btn.active svg { opacity: 1; }
 
-    /* Tab Content */
-    .tab-content { flex: 1; overflow: hidden; display: none; flex-direction: column; }
+    /* ===== TAB CONTENT ===== */
+    .tab-content { 
+      flex: 1; 
+      overflow: hidden; 
+      display: none; 
+      flex-direction: column;
+      animation: fadeIn var(--transition-smooth);
+    }
     .tab-content.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Chat Tab */
+    /* ===== CHAT TAB ===== */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      background: #f8f9fa;
+      gap: 16px;
+      background: linear-gradient(180deg, var(--surface-dim) 0%, var(--surface) 100%);
+      position: relative;
     }
-    .chat-messages::-webkit-scrollbar { width: 6px; }
-    .chat-messages::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    .chat-messages::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 55%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      height: 85%;
+      background-image: url('/pelvis-bg.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .chat-messages > * {
+      position: relative;
+      z-index: 1;
+    }
+    .chat-messages::-webkit-scrollbar { width: 5px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
     .message {
       max-width: 85%;
-      padding: 12px 16px;
-      border-radius: 16px;
+      padding: 14px 18px;
+      border-radius: var(--radius-lg);
       font-size: 14px;
-      line-height: 1.5;
-      animation: messageSlide 0.3s ease;
+      line-height: 1.6;
+      animation: messageSlide var(--transition-smooth) ease;
     }
-    @keyframes messageSlide { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .message.bot { background: white; color: #1f2937; align-self: flex-start; border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .message.user { background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .message.typing { display: flex; gap: 4px; padding: 16px 20px; }
-    .message.typing span { width: 8px; height: 8px; background: #9ca3af; border-radius: 50%; animation: typingDot 1.4s infinite; }
+    @keyframes messageSlide { 
+      from { opacity: 0; transform: translateY(12px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    .message.bot { 
+      background: var(--surface);
+      color: var(--text-primary);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+    }
+    .message.user { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      box-shadow: var(--shadow-md);
+    }
+    .message.typing { 
+      display: flex; 
+      gap: 5px; 
+      padding: 18px 22px;
+      background: var(--surface);
+    }
+    .message.typing span { 
+      width: 8px; 
+      height: 8px; 
+      background: var(--primary-light);
+      border-radius: 50%; 
+      animation: typingDot 1.4s infinite; 
+    }
     .message.typing span:nth-child(2) { animation-delay: 0.2s; }
     .message.typing span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingDot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+    @keyframes typingDot { 
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 
+      30% { transform: translateY(-8px); opacity: 1; } 
+    }
 
     .welcome-badge {
       display: inline-flex;
-      background: #f3f4f6;
-      border: 1px solid #e5e7eb;
-      color: #4a1c7c;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, rgba(201,169,98,0.15) 0%, rgba(201,169,98,0.05) 100%);
+      border: 1px solid rgba(201,169,98,0.3);
+      color: var(--gold);
       font-size: 11px;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 4px;
-      margin-bottom: 6px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .welcome-badge::before {
+      content: '✦';
+      font-size: 10px;
     }
 
-    .chat-input-area {
-      padding: 12px 16px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
+    .quick-actions {
       display: flex;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .quick-action {
+      background: var(--surface-dim);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .quick-action:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* ===== INPUT AREA ===== */
+    .chat-input-area {
+      padding: 16px 20px;
+      background: var(--surface);
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: 12px;
       align-items: flex-end;
       flex-shrink: 0;
     }
-    .chat-input {
+    .input-wrapper {
       flex: 1;
-      padding: 10px 14px;
-      border: 1px solid #e5e7eb;
-      border-radius: 20px;
+      position: relative;
+      background: var(--surface-dim);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-fast);
+    }
+    .input-wrapper:focus-within {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(91,45,130,0.1);
+    }
+    .chat-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
       font-size: 14px;
       font-family: inherit;
       resize: none;
-      max-height: 80px;
-      line-height: 1.4;
+      max-height: 100px;
+      line-height: 1.5;
+      color: var(--text-primary);
     }
-    .chat-input:focus { outline: none; border-color: #6b2c9e; box-shadow: 0 0 0 3px rgba(107, 44, 158, 0.15); }
+    .chat-input::placeholder { color: var(--text-muted); }
+    .chat-input:focus { outline: none; }
     .send-btn {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #4a1c7c 0%, #6b2c9e 100%);
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
       border: none;
-      border-radius: 50%;
+      border-radius: var(--radius-md);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all var(--transition-fast);
+      box-shadow: var(--shadow-sm);
     }
-    .send-btn:hover { transform: scale(1.05); }
-    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .send-btn svg { width: 18px; height: 18px; fill: white; margin-left: 2px; }
+    .send-btn:hover { transform: scale(1.05); box-shadow: var(--shadow-md); }
+    .send-btn:active { transform: scale(0.95); }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .send-btn svg { width: 20px; height: 20px; fill: white; }
 
-    /* Content Lists (Blogs, Videos, Resources) */
+    /* ===== CATEGORY FILTER ===== */
+    .category-filter {
+      display: flex;
+      gap: 8px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border-light);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      flex-shrink: 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .category-filter::-webkit-scrollbar { display: none; }
+    .filter-btn {
+      padding: 8px 16px;
+      background: var(--surface-dim);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .filter-btn:hover { 
+      background: var(--surface);
+      border-color: var(--primary-light);
+      color: var(--primary);
+    }
+    .filter-btn.active { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      border-color: transparent;
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* ===== CONTENT GRID ===== */
     .content-list {
       flex: 1;
       overflow-y: auto;
-      padding: 12px;
-      background: #f8f9fa;
+      padding: 16px;
+      background: var(--surface-dim);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-content: start;
     }
     .content-item {
-      background: white;
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 10px;
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 16px;
       cursor: pointer;
-      border: 1px solid #e5e7eb;
-      transition: all 0.2s;
+      border: 1px solid var(--border-light);
+      transition: all var(--transition-fast);
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
     }
-    .content-item:hover { border-color: #6b2c9e; box-shadow: 0 2px 8px rgba(74, 28, 124, 0.1); }
-    .content-item h4 { font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 4px; }
-    .content-item p { font-size: 12px; color: #6b7280; line-height: 1.4; }
-    .content-item .meta { font-size: 11px; color: #9ca3af; margin-top: 6px; display: flex; align-items: center; gap: 8px; }
-    .content-item .tag {
-      background: #f3e8ff;
-      color: #6b2c9e;
-      padding: 2px 8px;
-      border-radius: 4px;
+    .content-item:hover { 
+      border-color: var(--primary-light);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .content-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, rgba(91,45,130,0.1) 0%, rgba(124,77,171,0.05) 100%);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .content-icon svg { width: 22px; height: 22px; fill: var(--primary); }
+    .content-icon.video { background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(239,68,68,0.05) 100%); }
+    .content-icon.video svg { fill: #ef4444; }
+    .content-info { flex: 1; min-width: 0; }
+    .content-item h4 { 
+      font-size: 14px; 
+      font-weight: 600; 
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .content-item p { 
+      font-size: 12px; 
+      color: var(--text-secondary);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .content-meta { 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      margin-top: 10px;
+    }
+    .tag {
+      background: linear-gradient(135deg, rgba(201,169,98,0.15) 0%, rgba(201,169,98,0.05) 100%);
+      color: #a08339;
+      padding: 4px 10px;
+      border-radius: 12px;
       font-size: 10px;
-      font-weight: 500;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
+    .content-type {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .content-type svg { width: 12px; height: 12px; fill: currentColor; }
 
-    /* Modal Overlay - Full screen for videos */
+    /* ===== MODAL OVERLAY ===== */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
+      inset: 0;
+      background: rgba(15,17,21,0.9);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 10000;
+      z-index: 10001;
+      padding: 32px;
+      animation: modalFadeIn var(--transition-smooth);
     }
     .modal-overlay.open { display: flex; }
+    @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     .modal-content {
-      background: white;
-      width: 90%;
-      max-width: 800px;
-      max-height: 85vh;
-      border-radius: 12px;
+      background: var(--surface);
+      width: 95vw;
+      max-width: 1100px;
+      height: 90vh;
+      border-radius: var(--radius-xl);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      animation: modalSlide 0.3s ease;
+      animation: modalSlideIn var(--transition-smooth);
+      box-shadow: var(--shadow-xl);
     }
-    .modal-content.video-modal {
-      max-width: 1200px;
-      width: 90vw;
-      max-height: 90vh;
+    @keyframes modalSlideIn { 
+      from { opacity: 0; transform: scale(0.95) translateY(20px); } 
+      to { opacity: 1; transform: scale(1) translateY(0); } 
     }
-    @keyframes modalSlide { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
     .modal-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+    .modal-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.2);
       flex-shrink: 0;
     }
-    .modal-header h3 { font-size: 15px; font-weight: 600; color: #1f2937; }
-    .modal-close {
-      background: #f3f4f6;
+    .modal-icon svg { width: 22px; height: 22px; fill: white; }
+    .modal-title-group { min-width: 0; }
+    .modal-title-group h3 { 
+      font-size: 16px; 
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .modal-subtitle {
+      font-size: 12px;
+      opacity: 0.85;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .modal-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .modal-btn svg { width: 16px; height: 16px; }
+    .modal-btn.secondary {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+    .modal-btn.secondary:hover { background: rgba(255,255,255,0.25); }
+    .modal-btn.secondary svg { fill: white; }
+    .modal-btn.primary {
+      background: var(--gold);
       border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+      color: var(--primary-dark);
+    }
+    .modal-btn.primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .modal-btn.primary svg { fill: var(--primary-dark); }
+    .modal-close {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
     }
-    .modal-close:hover { background: #e5e7eb; }
-    .modal-close svg { width: 14px; height: 14px; fill: #6b7280; }
+    .modal-close:hover { background: rgba(255,255,255,0.2); }
+    .modal-close svg { width: 18px; height: 18px; fill: white; }
 
     .modal-body {
       flex: 1;
-      overflow-y: auto;
-      padding: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #525659;
+      min-height: 0;
     }
-    .modal-body h1, .modal-body h2, .modal-body h3 { color: #1f2937; margin: 16px 0 8px; }
-    .modal-body h1 { font-size: 20px; }
-    .modal-body h2 { font-size: 17px; }
-    .modal-body h3 { font-size: 15px; }
-    .modal-body p { font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 12px; }
-    .modal-body ul, .modal-body ol { margin: 12px 0; padding-left: 24px; }
-    .modal-body li { font-size: 14px; color: #374151; line-height: 1.6; margin-bottom: 6px; }
-
-    .video-embed {
+    
+    /* PDF Viewer Styles */
+    .pdf-viewer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #525659;
+      position: relative;
+      min-height: 0;
+    }
+    .pdf-viewer iframe {
+      flex: 1;
       width: 100%;
-      aspect-ratio: 16/9;
-      border-radius: 8px;
+      height: 100%;
+      border: none;
+      min-height: 0;
+    }
+    
+    /* Video Styles */
+    .video-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #000;
-      min-height: 500px;
+      min-height: 0;
+    }
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
 
-    /* Disclaimer */
+    /* ===== DISCLAIMER ===== */
     .chat-disclaimer {
-      padding: 8px 16px;
-      background: #f9fafb;
-      border-top: 1px solid #e5e7eb;
+      padding: 10px 20px;
+      background: var(--surface-elevated);
+      border-top: 1px solid var(--border-light);
       font-size: 10px;
-      color: #6b7280;
+      color: var(--text-muted);
       text-align: center;
       flex-shrink: 0;
     }
 
-    /* Mobile */
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .empty-state svg { width: 48px; height: 48px; fill: var(--border); margin-bottom: 16px; }
+    .empty-state p { font-size: 14px; }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 768px) {
+      .modal-overlay { padding: 0; }
+      .modal-content { 
+        width: 100vw; 
+        height: 100vh; 
+        max-width: 100%; 
+        border-radius: 0; 
+      }
+      .modal-header { padding: 12px 16px; }
+      .modal-title-group h3 { font-size: 14px; }
+      .modal-btn span { display: none; }
+      .modal-btn { padding: 10px 12px; }
+    }
     @media (max-width: 480px) {
       #hipguide-widget { bottom: 16px; right: 16px; }
-      .chat-window { width: calc(100vw - 32px); height: calc(100vh - 100px); }
+      .chat-window { 
+        width: calc(100vw - 32px); 
+        height: calc(100vh - 100px);
+        bottom: 76px;
+      }
       .chat-bubble { width: 56px; height: 56px; }
     }
   </style>
@@ -341,21 +786,40 @@
       <!-- Header -->
       <div class="chat-header">
         <div class="chat-header-left">
-          <div class="chat-avatar"><svg viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/></svg></div>
+          <div class="chat-avatar">
+            <svg viewBox="0 0 24 24">
+              <!-- Pelvis/socket outline -->
+              <path d="M3 8 C3 3 9 2 12 2 C15 2 21 3 21 8 L21 10 C21 12 19 13 17 13 L7 13 C5 13 3 12 3 10 Z" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
+              <!-- Femoral head (ball) - prominent -->
+              <circle cx="12" cy="11" r="4.5" fill="white" opacity="0.9"/>
+              <!-- Femur shaft -->
+              <path d="M12 15.5 L12 17 L9 22 L11 22 L12 19 L13 22 L15 22 L12 17 Z" fill="white"/>
+            </svg>
+          </div>
           <div class="chat-title">
             <h3>Hip Preservation Navigator</h3>
-            <span>Recovery Companion</span>
+            <span><span class="status-dot"></span>Recovery Companion</span>
           </div>
         </div>
-        <button class="close-btn" id="closeChat"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+        <button class="close-btn" id="closeChat">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
       </div>
 
       <!-- Tab Bar -->
       <div class="tab-bar">
-        <button class="tab-btn active" data-tab="chat">Chat</button>
-        <button class="tab-btn" data-tab="docs">Documents</button>
-        <button class="tab-btn" data-tab="videos">Videos</button>
-        <button class="tab-btn" data-tab="resources">Resources</button>
+        <button class="tab-btn active" data-tab="chat">
+          <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          Chat
+        </button>
+        <button class="tab-btn" data-tab="library">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          Library
+        </button>
+        <button class="tab-btn" data-tab="videos">
+          <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+          Videos
+        </button>
       </div>
 
       <!-- Chat Tab -->
@@ -363,42 +827,59 @@
         <div class="chat-messages" id="chatMessages">
           <div class="message bot">
             <div class="welcome-badge">Recovery Companion</div>
-            <div>Hi! I'm your Hip Preservation Navigator. I'm here to help with questions about your hip surgery journey. How can I support you today?</div>
+            <div>Hi there! I'm your Hip Preservation Navigator. I'm here to help answer questions about your hip surgery journey, recovery process, and more.</div>
+            <div class="quick-actions">
+              <button class="quick-action" data-msg="What should I expect after PAO surgery?">PAO Recovery</button>
+              <button class="quick-action" data-msg="How long until I can return to sports?">Return to Sports</button>
+              <button class="quick-action" data-msg="What exercises help with hip preservation?">PT Exercises</button>
+            </div>
           </div>
         </div>
-        <div class="chat-disclaimer">Educational information only. Always follow your surgeon's instructions.</div>
+        <div class="chat-disclaimer">Educational information only. Always follow your surgeon's specific instructions.</div>
         <div class="chat-input-area">
-          <textarea class="chat-input" id="chatInput" placeholder="Type your question..." rows="1"></textarea>
-          <button class="send-btn" id="sendBtn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
+          <div class="input-wrapper">
+            <textarea class="chat-input" id="chatInput" placeholder="Ask about your hip surgery journey..." rows="1"></textarea>
+          </div>
+          <button class="send-btn" id="sendBtn">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
         </div>
       </div>
 
-      <!-- Documents Tab -->
-      <div class="tab-content" id="tab-docs">
-        <div class="content-list" id="docsList"></div>
+      <!-- Library Tab -->
+      <div class="tab-content" id="tab-library">
+        <div class="category-filter" id="categoryFilter"></div>
+        <div class="content-list" id="libraryList"></div>
       </div>
 
       <!-- Videos Tab -->
       <div class="tab-content" id="tab-videos">
         <div class="content-list" id="videosList"></div>
       </div>
-
-      <!-- Resources Tab -->
-      <div class="tab-content" id="tab-resources">
-        <div class="content-list" id="resourcesList"></div>
-      </div>
-
     </div>
 
-    <button class="chat-bubble" id="chatBubble"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg></button>
+    <button class="chat-bubble" id="chatBubble">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    </button>
   </div>
 
-  <!-- Modal - Outside widget for full screen -->
+  <!-- Modal -->
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
+    <div class="modal-content" id="modalContent">
       <div class="modal-header">
-        <h3 id="modalTitle">Title</h3>
-        <button class="modal-close" id="modalClose"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+        <div class="modal-header-left">
+          <div class="modal-icon" id="modalIcon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          </div>
+          <div class="modal-title-group">
+            <h3 id="modalTitle">Document Title</h3>
+            <div class="modal-subtitle" id="modalSubtitle">PDF Document</div>
+          </div>
+        </div>
+        <div class="modal-actions" id="modalActions"></div>
+        <button class="modal-close" id="modalClose" title="Close">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
       </div>
       <div class="modal-body" id="modalBody"></div>
     </div>
@@ -406,60 +887,45 @@
 
   <script>
     (function() {
-      // Content Data
-      // Featured/Quick Access Documents (subset of most important PDFs)
-      const docs = [
-        { id: 'pao-overview', title: 'Overview of PAO Surgery', desc: 'Complete guide to periacetabular osteotomy.', tag: 'PAO', file: 'overview-of-periacetabular-osteotomy-pao-and-what-to-expect.pdf' },
-        { id: 'arthroscopy-prepost', title: 'Hip Arthroscopy Pre & Post-Op', desc: 'Instructions for before and after surgery.', tag: 'Hip Arthroscopy', file: 'hip-arthroscopy-pre-and-post-operative-instructions.pdf' },
-        { id: 'dysplasia-understand', title: 'Understanding Hip Dysplasia', desc: 'What you need to know about hip dysplasia.', tag: 'Hip Dysplasia', file: 'understanding-hip-dysplasia-what-you-need-to-know.pdf' },
-        { id: 'combined-preop', title: 'Combined Surgery Pre-Op', desc: 'Preparing for combined hip preservation surgery.', tag: 'Combined', file: 'combined-hip-preservation-surgery-pre-operative.pdf' },
-        { id: 'rehab-exercises', title: 'Hip Preservation PT Exercises', desc: 'Exercise guide for hip preservation patients.', tag: 'Therapy & Rehab', file: 'hip-preservation-physical-therapy-exercises.pdf' },
-        { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for PAO patients.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
-        { id: 'arthroscopy-return-sport', title: 'Return-to-Sport Timeline', desc: 'When and how to safely return to athletics.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline-after-hip-arthroscopy.pdf' },
-        { id: 'rehab-pao', title: 'PAO Rehabilitation Protocol', desc: 'Physical therapy protocol for PAO patients.', tag: 'Therapy & Rehab', file: 'pao-rehab.pdf' },
-      ];
-
-      const videos = [
-        { id: 'dr-casp', title: 'Meet Dr. Aaron Casp', desc: 'Hip preservation specialist introduction.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'dr-genuario', title: 'Dr. James Genuario', desc: 'Orthopedic surgeon at UCHealth.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'labral-tears-fai', title: 'Labral Tears and FAI', desc: 'Dr. Ellman explains diagnosis and treatment.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'michaela-story', title: "Michaela's Story", desc: 'College volleyball player with bilateral hip repairs.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'bursitis', title: 'Understanding Bursitis', desc: 'What it is and how to get better.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'labral-repair-vs-replacement', title: 'Labral Repair vs Replacement', desc: 'Making the right choice for your hip.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'how-to-sit-after-surgery', title: 'Sitting After Hip Surgery', desc: 'Proper technique for post-op patients.', youtube: 'dQw4w9WgXcQ' },
-        { id: 'hip-dysplasia-causes', title: 'Hip Dysplasia Explained', desc: 'Causes and treatment options.', youtube: 'dQw4w9WgXcQ' },
-      ];
-
-      const resources = [
-        // PAO Resources
+      // ===== DATA =====
+      const library = [
         { id: 'pao-overview', title: 'Overview of PAO and What to Expect', desc: 'Complete guide to periacetabular osteotomy surgery.', tag: 'PAO', file: 'overview-of-periacetabular-osteotomy-pao-and-what-to-expect.pdf' },
         { id: 'pao-prep', title: 'Preparing for PAO Surgery', desc: 'How to prepare for your PAO procedure.', tag: 'PAO', file: 'preparing-for-pao-surgery.pdf' },
         { id: 'pao-checklist', title: 'PAO Surgery Checklist', desc: 'Preparation checklist for PAO patients.', tag: 'PAO', file: 'pao-surgery-checklist.pdf' },
         { id: 'pao-risks', title: 'PAO Surgery: Risks and Recovery', desc: 'Understanding risks, complications, and recovery process.', tag: 'PAO', file: 'pao-surgery-risks-complications-and-recovery-process.pdf' },
         { id: 'pao-life-after', title: 'Life After PAO', desc: 'Recovery, physical therapy, and FAQs.', tag: 'PAO', file: 'life-after-pao-recovery-physical-therapy-and-faqs.pdf' },
-        // Hip Arthroscopy Resources
-        { id: 'arthroscopy-prepost', title: 'Hip Arthroscopy Pre & Post-Op', desc: 'Instructions for before and after surgery.', tag: 'Hip Arthroscopy', file: 'hip-arthroscopy-pre-and-post-operative-instructions.pdf' },
-        { id: 'arthroscopy-checklist', title: 'Surgery Checklist', desc: 'Everything you need for surgery day.', tag: 'Hip Arthroscopy', file: 'surgery-checklist.pdf' },
-        { id: 'arthroscopy-return-sport', title: 'Return-to-Sport Timeline', desc: 'When and how to safely return to athletics.', tag: 'Hip Arthroscopy', file: 'return-to-sport-timeline-after-hip-arthroscopy.pdf' },
-        { id: 'arthroscopy-everyday', title: 'Everyday Life After Arthroscopy', desc: 'Navigating daily activities during recovery.', tag: 'Hip Arthroscopy', file: 'everyday-life-after-hip-arthroscopy.pdf' },
-        // Hip Dysplasia Resources
-        { id: 'dysplasia-understand', title: 'Understanding Hip Dysplasia', desc: 'What you need to know about hip dysplasia.', tag: 'Hip Dysplasia', file: 'understanding-hip-dysplasia-what-you-need-to-know.pdf' },
-        { id: 'dysplasia-causes', title: 'What Causes Hip Dysplasia?', desc: 'Learn about the causes and risk factors.', tag: 'Hip Dysplasia', file: 'what-causes-hip-dysplasia.pdf' },
-        { id: 'dysplasia-diagnosis', title: 'Diagnosis of Hip Dysplasia', desc: 'How hip dysplasia is diagnosed.', tag: 'Hip Dysplasia', file: 'diagnosis-of-hip-dysplasia.pdf' },
-        { id: 'dysplasia-questions', title: 'Questions to Ask Your Doctor', desc: 'Understanding hip dysplasia in adolescents.', tag: 'Hip Dysplasia', file: 'questions-to-ask-your-doctor-understanding-hip-dysplasia-in-adolescents.pdf' },
-        // Combined Surgery Resources
+        { id: 'rehab-pao', title: 'PAO Rehabilitation Protocol', desc: 'Physical therapy protocol for PAO patients.', tag: 'PAO', file: 'pao-rehab.pdf' },
+        { id: 'arthroscopy-prepost', title: 'Hip Arthroscopy Pre & Post-Op', desc: 'Instructions for before and after surgery.', tag: 'Arthroscopy', file: 'hip-arthroscopy-pre-and-post-operative-instructions.pdf' },
+        { id: 'arthroscopy-checklist', title: 'Arthroscopy Surgery Checklist', desc: 'Everything you need for surgery day.', tag: 'Arthroscopy', file: 'surgery-checklist.pdf' },
+        { id: 'arthroscopy-return-sport', title: 'Return-to-Sport Timeline', desc: 'When and how to safely return to athletics.', tag: 'Arthroscopy', file: 'return-to-sport-timeline-after-hip-arthroscopy.pdf' },
+        { id: 'arthroscopy-everyday', title: 'Everyday Life After Arthroscopy', desc: 'Navigating daily activities during recovery.', tag: 'Arthroscopy', file: 'everyday-life-after-hip-arthroscopy.pdf' },
+        { id: 'rehab-arthroscopy', title: 'Hip Arthroscopy Rehabilitation', desc: 'Physical therapy protocol for arthroscopy patients.', tag: 'Arthroscopy', file: 'hip-arthroscopy-rehabilitation.pdf' },
+        { id: 'dysplasia-understand', title: 'Understanding Hip Dysplasia', desc: 'What you need to know about hip dysplasia.', tag: 'Dysplasia', file: 'understanding-hip-dysplasia-what-you-need-to-know.pdf' },
+        { id: 'dysplasia-causes', title: 'What Causes Hip Dysplasia?', desc: 'Learn about the causes and risk factors.', tag: 'Dysplasia', file: 'what-causes-hip-dysplasia.pdf' },
+        { id: 'dysplasia-diagnosis', title: 'Diagnosis of Hip Dysplasia', desc: 'How hip dysplasia is diagnosed.', tag: 'Dysplasia', file: 'diagnosis-of-hip-dysplasia.pdf' },
+        { id: 'dysplasia-questions', title: 'Questions to Ask Your Doctor', desc: 'Understanding hip dysplasia in adolescents.', tag: 'Dysplasia', file: 'questions-to-ask-your-doctor-understanding-hip-dysplasia-in-adolescents.pdf' },
         { id: 'combined-preop', title: 'Combined Surgery Pre-Operative', desc: 'Preparing for combined hip preservation surgery.', tag: 'Combined', file: 'combined-hip-preservation-surgery-pre-operative.pdf' },
         { id: 'combined-checklist', title: 'Combined Surgery Checklist', desc: 'Checklist for arthroscopy and Ganz osteotomy.', tag: 'Combined', file: 'surgery-checklist-combined-hip-arthroscopy-and-ganz-osteotomy.pdf' },
         { id: 'combined-recovery', title: 'Managing Recovery from Combined Surgeries', desc: 'Recovery guidance for dual procedures.', tag: 'Combined', file: 'managing-recovery-from-combined-surgeries.pdf' },
         { id: 'combined-painpump', title: 'Ambit Pain Control Pump', desc: 'Instructions for using the pain pump.', tag: 'Combined', file: 'ambit-pain-control-pump-instructions.pdf' },
-        // Therapy & Rehab Resources
-        { id: 'rehab-arthroscopy', title: 'Hip Arthroscopy Rehabilitation', desc: 'Physical therapy protocol for arthroscopy patients.', tag: 'Therapy & Rehab', file: 'hip-arthroscopy-rehabilitation.pdf' },
-        { id: 'rehab-pao', title: 'PAO Rehabilitation', desc: 'Physical therapy protocol for PAO patients.', tag: 'Therapy & Rehab', file: 'pao-rehab.pdf' },
-        { id: 'rehab-exercises', title: 'Hip Preservation PT Exercises', desc: 'Exercise guide for hip preservation patients.', tag: 'Therapy & Rehab', file: 'hip-preservation-physical-therapy-exercises.pdf' },
-        { id: 'rehab-log', title: 'Daily Recovery Log', desc: 'Track your daily recovery progress.', tag: 'Therapy & Rehab', file: 'daily-recovery-log.pdf' },
+        { id: 'rehab-exercises', title: 'Hip Preservation PT Exercises', desc: 'Exercise guide for hip preservation patients.', tag: 'Rehab', file: 'hip-preservation-physical-therapy-exercises.pdf' },
+        { id: 'rehab-log', title: 'Daily Recovery Log', desc: 'Track your daily recovery progress.', tag: 'Rehab', file: 'daily-recovery-log.pdf' },
       ];
 
-      // Elements
+      const videos = [
+        { id: 'dr-casp', title: 'Meet Dr. Aaron Casp', desc: 'Hip preservation specialist introduction.', youtube: 'dQw4w9WgXcQ', duration: '3:45' },
+        { id: 'dr-genuario', title: 'Dr. James Genuario', desc: 'Orthopedic surgeon at UCHealth.', youtube: 'dQw4w9WgXcQ', duration: '4:12' },
+        { id: 'labral-tears-fai', title: 'Labral Tears and FAI', desc: 'Dr. Ellman explains diagnosis and treatment.', youtube: 'dQw4w9WgXcQ', duration: '8:30' },
+        { id: 'michaela-story', title: "Michaela's Story", desc: 'College volleyball player with bilateral hip repairs.', youtube: 'dQw4w9WgXcQ', duration: '6:15' },
+        { id: 'bursitis', title: 'Understanding Bursitis', desc: 'What it is and how to get better.', youtube: 'dQw4w9WgXcQ', duration: '5:20' },
+        { id: 'labral-repair-vs-replacement', title: 'Labral Repair vs Replacement', desc: 'Making the right choice for your hip.', youtube: 'dQw4w9WgXcQ', duration: '7:45' },
+        { id: 'how-to-sit', title: 'Sitting After Hip Surgery', desc: 'Proper technique for post-op patients.', youtube: 'dQw4w9WgXcQ', duration: '4:00' },
+        { id: 'hip-dysplasia', title: 'Hip Dysplasia Explained', desc: 'Causes and treatment options.', youtube: 'dQw4w9WgXcQ', duration: '9:10' },
+      ];
+
+      const categories = ['All', ...new Set(library.map(item => item.tag))];
+
+      // ===== ELEMENTS =====
       const bubble = document.getElementById('chatBubble');
       const chatWindow = document.getElementById('chatWindow');
       const closeBtn = document.getElementById('closeChat');
@@ -469,15 +935,21 @@
       const tabBtns = document.querySelectorAll('.tab-btn');
       const tabContents = document.querySelectorAll('.tab-content');
       const modalOverlay = document.getElementById('modalOverlay');
+      const modalContent = document.getElementById('modalContent');
       const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalIcon = document.getElementById('modalIcon');
+      const modalActions = document.getElementById('modalActions');
       const modalBody = document.getElementById('modalBody');
       const modalClose = document.getElementById('modalClose');
+      const filterContainer = document.getElementById('categoryFilter');
 
       let isOpen = false;
       let isLoading = false;
       let conversationHistory = [];
+      let activeFilter = 'All';
 
-      // Toggle widget
+      // ===== WIDGET TOGGLE =====
       function toggleChat() {
         isOpen = !isOpen;
         chatWindow.classList.toggle('open', isOpen);
@@ -487,7 +959,7 @@
       bubble.addEventListener('click', toggleChat);
       closeBtn.addEventListener('click', toggleChat);
 
-      // Tab switching
+      // ===== TAB SWITCHING =====
       tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           tabBtns.forEach(b => b.classList.remove('active'));
@@ -497,88 +969,140 @@
         });
       });
 
-      // Render content lists
-      function renderList(container, items, type) {
-        container.innerHTML = items.map(item => `
-          <div class="content-item" data-type="${item.file ? 'pdf' : type}" data-id="${item.id}" ${item.youtube ? `data-youtube="${item.youtube}"` : ''} ${item.file ? `data-file="${item.file}"` : ''}>
-            <h4>${item.title}</h4>
-            <p>${item.desc}</p>
-            <div class="meta">
-              ${item.tag ? `<span class="tag">${item.tag}</span>` : ''}
-              ${type === 'video' ? '<span>Video</span>' : item.file ? '<span>PDF Document</span>' : '<span>Read more</span>'}
+      // ===== RENDER LIBRARY =====
+      function renderLibraryItem(item) {
+        return `
+          <div class="content-item" data-type="pdf" data-id="${item.id}" data-file="${item.file}" data-title="${item.title}" data-tag="${item.tag}">
+            <div class="content-icon">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+            </div>
+            <div class="content-info">
+              <h4>${item.title}</h4>
+              <p>${item.desc}</p>
+              <div class="content-meta">
+                <span class="tag">${item.tag}</span>
+                <span class="content-type">
+                  <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                  PDF
+                </span>
+              </div>
             </div>
           </div>
-        `).join('');
+        `;
       }
-      renderList(document.getElementById('docsList'), docs, 'doc');
-      renderList(document.getElementById('videosList'), videos, 'video');
-      renderList(document.getElementById('resourcesList'), resources, 'resource');
 
-      // Content item click - open modal
-      document.querySelectorAll('.content-item').forEach(item => {
-        item.addEventListener('click', async () => {
-          const type = item.dataset.type;
-          const id = item.dataset.id;
-          const title = item.querySelector('h4').textContent;
-          
-          modalTitle.textContent = title;
-          
-          if (type === 'video') {
-            const ytId = item.dataset.youtube;
-            document.querySelector('.modal-content').classList.add('video-modal');
-            modalBody.innerHTML = `<iframe class="video-embed" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-          } else if (type === 'doc' || type === 'pdf') {
-            const file = item.dataset.file;
-            document.querySelector('.modal-content').classList.add('video-modal');
-            modalBody.innerHTML = `
-              <div style="display:flex;flex-direction:column;height:100%;">
-                <div style="padding:12px 0;display:flex;justify-content:flex-end;gap:12px;">
-                  <a href="/pdfs/${file}" target="_blank" style="background:#f3f4f6;color:#4a1c7c;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;border:1px solid #e5e7eb;">Open in New Tab</a>
-                  <a href="/pdfs/${file}" download class="download-btn" style="background:linear-gradient(135deg,#4a1c7c,#6b2c9e);color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:500;">Download PDF</a>
-                </div>
-                <iframe src="/pdfs/${file}" style="flex:1;width:100%;border:none;border-radius:8px;min-height:500px;"></iframe>
+      function renderVideoItem(item) {
+        return `
+          <div class="content-item" data-type="video" data-id="${item.id}" data-youtube="${item.youtube}" data-title="${item.title}">
+            <div class="content-icon video">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="content-info">
+              <h4>${item.title}</h4>
+              <p>${item.desc}</p>
+              <div class="content-meta">
+                <span class="tag" style="background: linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(239,68,68,0.05) 100%); color: #dc2626;">Video</span>
+                <span class="content-type">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-4h2v2h-2zm0-2h2V7h-2z"/></svg>
+                  ${item.duration}
+                </span>
               </div>
-            `;
-          } else {
-            document.querySelector('.modal-content').classList.remove('video-modal');
-            modalBody.innerHTML = '<p style="text-align:center;color:#9ca3af;">Loading...</p>';
-            try {
-              const resp = await fetch(`/api/content/${type}/${id}`);
-              if (resp.ok) {
-                const data = await resp.json();
-                modalBody.innerHTML = data.html || '<p>Content not available.</p>';
-              } else {
-                modalBody.innerHTML = '<p>Unable to load content. Please try again.</p>';
-              }
-            } catch (e) {
-              modalBody.innerHTML = '<p>Unable to load content. Please try again.</p>';
-            }
-          }
-          modalOverlay.classList.add('open');
-        });
-      });
+            </div>
+          </div>
+        `;
+      }
 
-      // Close modal
+      function renderLibrary() {
+        const filtered = activeFilter === 'All' ? library : library.filter(item => item.tag === activeFilter);
+        document.getElementById('libraryList').innerHTML = filtered.map(renderLibraryItem).join('');
+        attachContentListeners('libraryList');
+      }
+
+      function renderVideos() {
+        document.getElementById('videosList').innerHTML = videos.map(renderVideoItem).join('');
+        attachContentListeners('videosList');
+      }
+
+      function renderFilters() {
+        filterContainer.innerHTML = categories.map(cat => 
+          `<button class="filter-btn${cat === activeFilter ? ' active' : ''}" data-cat="${cat}">${cat}</button>`
+        ).join('');
+        filterContainer.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            filterContainer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.dataset.cat;
+            renderLibrary();
+          });
+        });
+      }
+
+      function attachContentListeners(containerId) {
+        document.getElementById(containerId).querySelectorAll('.content-item').forEach(item => {
+          item.addEventListener('click', () => openModal(item));
+        });
+      }
+
+      // ===== MODAL =====
+      function openModal(item) {
+        const type = item.dataset.type;
+        const title = item.dataset.title;
+        
+        modalTitle.textContent = title;
+        
+        if (type === 'video') {
+          const ytId = item.dataset.youtube;
+          modalIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="white"/></svg>';
+          modalSubtitle.textContent = 'Video';
+          modalActions.innerHTML = '';
+          modalBody.innerHTML = `
+            <div class="video-container">
+              <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+          `;
+        } else {
+          const file = item.dataset.file;
+          const tag = item.dataset.tag;
+          modalIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="white"/></svg>';
+          modalSubtitle.innerHTML = `<span class="tag" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">${tag}</span> PDF Document`;
+          modalActions.innerHTML = `
+            <a href="/pdfs/${file}" target="_blank" class="modal-btn secondary">
+              <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+              Open in Tab
+            </a>
+            <a href="/pdfs/${file}" download class="modal-btn primary">
+              <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+              Download
+            </a>
+          `;
+          modalBody.innerHTML = `
+            <div class="pdf-viewer">
+              <iframe src="/pdfs/${file}#pagemode=none&view=FitH"></iframe>
+            </div>
+          `;
+        }
+        
+        modalOverlay.classList.add('open');
+      }
+
       function closeModal() {
         modalOverlay.classList.remove('open');
-        document.querySelector('.modal-content').classList.remove('video-modal');
-        // Stop video playback
         const iframe = modalBody.querySelector('iframe');
         if (iframe) iframe.src = '';
       }
+
       modalClose.addEventListener('click', closeModal);
       modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) closeModal();
       });
 
-      // Chat functionality
+      // ===== CHAT =====
       input.addEventListener('input', function() {
         this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+        this.style.height = Math.min(this.scrollHeight, 100) + 'px';
       });
 
-      async function sendMessage() {
-        const text = input.value.trim();
+      async function sendMessage(text) {
         if (!text || isLoading) return;
 
         addMessage(text, 'user');
@@ -628,16 +1152,31 @@
         return typing;
       }
 
-      sendBtn.addEventListener('click', sendMessage);
+      sendBtn.addEventListener('click', () => sendMessage(input.value.trim()));
       input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        if (e.key === 'Enter' && !e.shiftKey) { 
+          e.preventDefault(); 
+          sendMessage(input.value.trim()); 
+        }
       });
+
+      // Quick actions
+      document.querySelectorAll('.quick-action').forEach(btn => {
+        btn.addEventListener('click', () => sendMessage(btn.dataset.msg));
+      });
+
+      // Escape key
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           if (modalOverlay.classList.contains('open')) closeModal();
           else if (isOpen) toggleChat();
         }
       });
+
+      // ===== INIT =====
+      renderFilters();
+      renderLibrary();
+      renderVideos();
     })();
   </script>
 </body>
