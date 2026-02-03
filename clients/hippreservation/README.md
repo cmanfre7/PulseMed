@@ -11,12 +11,19 @@ HipGuide is an AI-powered assistant for patients of Hip Preservation Orthopedic 
 ## 🚀 Quick Start
 
 ```bash
-# From this directory
+# From PulseMed monorepo root
 npm install
-npm run dev
+npm run start:hip
 ```
 
-The app will be available at `http://localhost:5173` (Vite dev server).
+Or from this directory:
+
+```bash
+npm install
+npm run start
+```
+
+The app runs at **http://localhost:3000**. The chat widget is served from `public/index.html` (static HTML/CSS/JS; no Vite build required for the widget).
 
 ## 📚 Documentation (in this folder)
 
@@ -36,13 +43,22 @@ hippreservation/
 ├── knowledge-base/       # 📚 PDF documents for the AI to reference (index.json + pdfs/*.md after ingest)
 ├── prompts/              # 💬 Custom system prompts (optional)
 ├── overrides/            # 🔄 Client-specific code overrides
-├── public/               # 🎨 Static assets, chat widget (index.html), pdfs/
+├── public/               # 🎨 Chat widget and static assets
+│   ├── index.html        # Chat widget: Chat / Library / Videos tabs (single-page)
+│   ├── hipbackground.svg # Background image in chat message area
+│   └── pdfs/             # PDFs served for Library tab download links
 ├── scripts/              # ingest-pdfs.js — PDF → markdown + index for RAG
 ├── AGENTS.md             # AI instructions and status (this client only)
 ├── CHANGELOG.md          # Running history (this client only)
 ├── server.js             # 🖥️ Express server entry point
 └── package.json          # Dependencies
 ```
+
+### Chat Widget Tabs
+
+- **Chat** — AI conversation with hip background image; RAG from knowledge base.
+- **Library** — Sidebar with 5 categories (Hip Dysplasia, Therapy and Rehab, Hip Arthroscopy, PAO, Combined Hip Arthroscopy and PAO). PDF titles shown as branded buttons; click to download. No modal.
+- **Videos** — Category filters (Hip Dysplasia, PAO Surgery, Hip Arthroscopy, Rehab & PT, Patient Stories, Meet the Surgeons). Thumbnail grid; click opens YouTube in a new tab. No modal.
 
 ## 🎯 What You Need to Do
 
@@ -69,13 +85,14 @@ knowledge-base/
 
 Run `npm run kb:ingest` after adding new PDFs.
 
-### 3. Customize the UI (`src/`)
+### 3. Customize the UI (`public/`)
 
-The React frontend can be customized:
+The chat widget is a single-page app in `public/index.html` (HTML, CSS, inline JS):
 
-- `src/App.jsx` - Main component (chat interface)
-- `src/index.css` - Tailwind CSS styles
-- `public/` - Logo and static assets
+- **Chat tab** — Message area, input, quick actions; background image from `public/hipbackground.svg`.
+- **Library tab** — Sidebar categories and PDF download buttons; data and categories are defined in the script section of `index.html`.
+- **Videos tab** — Category filters and video cards; replace placeholder YouTube IDs in the `videos` array with real video IDs from the practice’s channel for thumbnails and links.
+- **Branding** — CSS variables in `:root` (primary purple, gold, lavender) match Hip Preservation website.
 
 ### 4. (Optional) Add Custom Logic (`overrides/`)
 
@@ -136,10 +153,12 @@ Keywords that trigger emergency/urgent responses:
 ### Local Development
 
 ```bash
-npm run dev          # Start Vite dev server
-npm run build        # Build for production
-npm run start        # Run production server
+npm run start        # Run Express server (from this directory)
+# Or from monorepo root:
+npm run start:hip    # Same — Hip Preservation on http://localhost:3000
 ```
+
+The chat widget is static (`public/index.html`); no separate build step. The server serves `public/` (or `dist/` if built) and handles `/api/chat`, `/api/health`, `/api/content`.
 
 ### Adding Knowledge Base Documents
 

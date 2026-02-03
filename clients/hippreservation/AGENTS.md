@@ -62,13 +62,16 @@ When completing meaningful work **in this client folder**:
 
 **✅ In place:**
 - `config.json`, `server.js`, `public/` (chat widget: Chat / Library / Videos).
+- **Chat tab:** AI conversation; fixed hip background image (`public/hipbackground.svg`); scrollable message area; purple/gold/lavender branding.
+- **Library tab:** Five sidebar categories (Hip Dysplasia, Therapy and Rehab, Hip Arthroscopy, PAO, Combined Hip Arthroscopy and PAO). Branded PDF buttons with titles; click to download directly (no modal). PDFs served from `public/pdfs/`.
+- **Videos tab:** Category filter buttons (All, Hip Dysplasia, PAO Surgery, Hip Arthroscopy, Rehab & PT, Patient Stories, Meet the Surgeons). Two-column thumbnail grid; click opens YouTube in new tab (no modal). Placeholder YouTube IDs in `public/index.html` — replace with real video IDs for thumbnails and links.
 - Core chat: `@pulsemed/core`; RAG from `knowledge-base/` (index + markdown derived from PDFs).
 - `scripts/ingest-pdfs.js` — scans `knowledge-base/` PDFs, writes `knowledge-base/pdfs/*.md` and `knowledge-base/index.json`.
 - Triage: emergency/urgent keywords and escalation in `config.json`.
-- Public PDFs from `public/pdfs/` for download/view.
 
 **🔄 To build:**
 - Admin dashboard: login, KB management, **document upload** (primary KB input), **custom AI instructions** (editable system-prompt additions).
+- **Videos:** Replace placeholder YouTube IDs in `public/index.html` with real video IDs from the practice’s channel.
 - Optional: Wix file manager integration for assets; chatbot KB can still be fed from dashboard uploads or repo-based ingest.
 - If `knowledge-base/pdfs/*.md` were removed: run `node scripts/ingest-pdfs.js` from this folder to regenerate.
 
@@ -93,10 +96,12 @@ When completing meaningful work **in this client folder**:
 | Path | Purpose |
 |------|---------|
 | `config.json` | Branding, triage, AI model, `ai.systemPromptAdditions` |
-| `server.js` | Express app: health, content, chat; loads KB from `knowledge-base/` |
+| `server.js` | Express app: health, content, chat; loads KB from `knowledge-base/`; serves `public/` (or `dist/`) |
 | `knowledge-base/` | Source PDFs by topic; after ingest: `index.json` + `pdfs/*.md` |
-| `scripts/ingest-pdfs.js` | PDF → markdown + index for RAG |
-| `public/index.html` | Chat widget (Chat / Library / Videos) |
+| `scripts/ingest-pdfs.js` | PDF → markdown + index for RAG; scans `knowledge-base/` (all subfolders) |
+| `public/index.html` | Chat widget: Chat (AI + hip bg), Library (sidebar + PDF download buttons), Videos (category filters + thumbnail grid → YouTube in new tab). Data for Library/Videos in script section. |
+| `public/hipbackground.svg` | Background image in chat message area |
+| `public/pdfs/` | PDFs served for Library tab download links |
 | `packages/core/api/chat.js` (monorepo) | Shared chat handler; do not change without discussion |
 
 Custom AI instructions live in `config.json` under `ai.systemPromptAdditions`. Optional: load from `prompts/system-prompt.md` and merge in server if added.
@@ -129,4 +134,4 @@ Custom AI instructions live in `config.json` under `ai.systemPromptAdditions`. O
 
 ---
 
-*Last Updated: February 2025*
+*Last Updated: February 2025 — Frontend rebuild (Library sidebar, Videos category grid, no modals) reflected in CHANGELOG.md and README.md.*
