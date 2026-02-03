@@ -18,18 +18,28 @@ npm run dev
 
 The app will be available at `http://localhost:5173` (Vite dev server).
 
+## 📚 Documentation (in this folder)
+
+All Hip Preservation–specific docs live **here**, not in PulseMed root:
+
+| File | Purpose |
+|------|---------|
+| **README.md** | This file — structure, setup, commands |
+| **AGENTS.md** | AI instructions, current status, key files — **read before making changes** |
+| **CHANGELOG.md** | Running history: where we started, where we are, where we’re going |
+
 ## 📁 Project Structure
 
 ```
 hippreservation/
 ├── config.json           # 🔧 CLIENT CONFIGURATION - Your main customization file
-├── knowledge-base/       # 📚 PDF documents for the AI to reference
+├── knowledge-base/       # 📚 PDF documents for the AI to reference (index.json + pdfs/*.md after ingest)
 ├── prompts/              # 💬 Custom system prompts (optional)
 ├── overrides/            # 🔄 Client-specific code overrides
-├── public/               # 🎨 Static assets (logo, images)
-├── src/                  # ⚛️ React frontend code
-│   ├── App.jsx           # Main application component
-│   └── index.css         # Styles (Tailwind)
+├── public/               # 🎨 Static assets, chat widget (index.html), pdfs/
+├── scripts/              # ingest-pdfs.js — PDF → markdown + index for RAG
+├── AGENTS.md             # AI instructions and status (this client only)
+├── CHANGELOG.md          # Running history (this client only)
 ├── server.js             # 🖥️ Express server entry point
 └── package.json          # Dependencies
 ```
@@ -154,8 +164,8 @@ This client is deployed via Railway (managed by PulseMed):
 ### Required Environment Variables
 
 - `USE_VENDOR_LLM=true`
-- `VENDOR_API_KEY=sk-ant-...` (Anthropic API key)
-- `HUBSPOT_API_KEY=...` (if using HubSpot)
+- `VENDOR_API_KEY=sk-ant-...` (or `ANTHROPIC_API_KEY`) — Anthropic API key
+- No patient data or HubSpot required for this client
 
 ## 🆘 Support
 
